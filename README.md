@@ -1,5 +1,5 @@
 # ccxt-unmerged
-Exchanges whose open PRs hasn't been merged into ccxt yet.
+Exchanges whose open PRs haven't been merged into ccxt yet.
 
 ```
 import ccxt_unmerged

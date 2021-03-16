@@ -5,6 +5,7 @@ __version__ = '1.0'
 __author__ = 'binares'
 
 import ccxt
+import sys
 
 from ._58coin import _58coin
 from .bcio import bcio
@@ -54,4 +55,5 @@ for attr,value in list(globals().items()):
         if not hasattr(ccxt, attr):
             setattr(ccxt, attr, value)
 
-from . import async_support # initialize async exchanges
+if sys.version_info >= (3, 5, 3):
+    from . import async_support # initialize async exchanges
