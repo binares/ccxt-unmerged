@@ -6,6 +6,7 @@ __author__ = 'binares'
 
 import ccxt
 import sys
+import warnings
 
 from ._58coin import _58coin
 from .bcio import bcio
@@ -49,11 +50,22 @@ from .vitex import vitex
 from .wazirx import wazirx
 from .yunex import yunex
 
+_ALREADY_MERGED = []
+
 # Add the custom-defined exchanges to ccxt
 for attr,value in list(globals().items()):
     if isinstance(value, type) and issubclass(value, ccxt.Exchange):
         if not hasattr(ccxt, attr):
             setattr(ccxt, attr, value)
+        else:
+            _ALREADY_MERGED.append(attr)
 
 if sys.version_info >= (3, 5, 3):
     from . import async_support # initialize async exchanges
+
+
+def warn_duplicated():
+    """Warn the user that the new exchange version in ccxt (that we'll be using now)
+    might differ from the one previously defined here"""
+    for exchange in _ALREADY_MERGED:
+        warnings.warn("Exchange '{}' has been added to ccxt. If you were using the old version (in ccxt_unmerged), there might be some differences.".format(exchange))
