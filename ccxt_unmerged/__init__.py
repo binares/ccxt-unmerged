@@ -1,7 +1,7 @@
 """
 Exchanges that are not present in ccxt
 """
-__version__ = '1.0'
+__version__ = '1.1'
 __author__ = 'binares'
 
 import ccxt

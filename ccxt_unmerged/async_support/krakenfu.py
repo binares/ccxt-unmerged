@@ -4,7 +4,6 @@
 # https://github.com/ccxt/ccxt/blob/master/CONTRIBUTING.md#how-to-contribute-code
 
 from ccxt.async_support.base.exchange import Exchange
-import base64
 import hashlib
 from ccxt.base.errors import ExchangeError
 from ccxt.base.errors import AuthenticationError
@@ -1108,12 +1107,12 @@ class krakenfu(Exchange):
             nonce = ''  # self.nonce()
             auth = postData + nonce + endpoint  # 1
             hash = self.hash(self.encode(auth), 'sha256', 'binary')  # 2
-            secret = base64.b64decode(self.secret)  # 3
+            secret = self.base64_to_binary(self.secret)  # 3
             signature = self.hmac(hash, secret, hashlib.sha512, 'base64')  # 4-5
             headers = {
                 'Content-Type': 'application/json',
                 'APIKey': self.apiKey,
-                'Authent': self.decode(signature),
+                'Authent': signature,
             }
             # headers['Nonce'] = nonce
         return {'url': url, 'method': method, 'body': body, 'headers': headers}
