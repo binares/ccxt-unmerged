@@ -1,7 +1,7 @@
 """
 Exchanges that are not present in ccxt
 """
-__version__ = '1.2'
+__version__ = '2.0'
 __author__ = 'binares'
 
 import ccxt
@@ -12,7 +12,6 @@ from ._58coin import _58coin
 from .bcio import bcio
 from .beaxy import beaxy
 from .biki import biki
-from .bitbns import bitbns
 from .bitclude import bitclude
 from .bitforexfu import bitforexfu
 from .bitkub import bitkub
