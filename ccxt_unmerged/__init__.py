@@ -1,7 +1,7 @@
 """
 Exchanges that are not present in ccxt
 """
-__version__ = '1.1'
+__version__ = '1.2'
 __author__ = 'binares'
 
 import ccxt
@@ -67,5 +67,8 @@ if sys.version_info >= (3, 5, 3):
 def warn_duplicated():
     """Warn the user that the new exchange version in ccxt (that we'll be using now)
     might differ from the one previously defined here"""
-    for exchange in _ALREADY_MERGED:
-        warnings.warn("Exchange '{}' has been added to ccxt. If you were using the old version (in ccxt_unmerged), there might be some differences.".format(exchange))
+    if _ALREADY_MERGED:
+        merged_exchanges = "'" + "', '".join(_ALREADY_MERGED) + "'"
+        warnings.warn("Exchanges %s have been added to ccxt. If you were using the old version (in ccxt_unmerged), there might be some differences." % merged_exchanges)
+
+warn_duplicated()

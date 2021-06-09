@@ -8,8 +8,10 @@ __pycache__/
 /.project
 /.pydevproject
 
-# Vscode
-/.vscode/
+# Visual
+*.pyproj
+.vs/
+.vscode/
 
 # C extensions
 *.so
