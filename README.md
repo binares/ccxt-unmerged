@@ -13,7 +13,6 @@ _58coin<br/>
 bcio<br/>
 beaxy<br/>
 biki<br/>
-bitbns<br/>
 bitclude<br/>
 bitforexfu<br/>
 bitkub<br/>
