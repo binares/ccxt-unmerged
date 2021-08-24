@@ -256,7 +256,7 @@ class bitrue(Exchange):
         response = self.publicGetDepth(self.extend(request, params))
         orderbook = response if response else {}
         timestamp = self.safe_integer(orderbook, 'lastUpdateId')
-        return self.parse_order_book(orderbook, timestamp)
+        return self.parse_order_book(orderbook, symbol, timestamp)
 
     def fetch_trades(self, symbol, since=None, limit=None, params={}):
         self.load_markets()

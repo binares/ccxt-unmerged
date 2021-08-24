@@ -284,7 +284,7 @@ class wazirx(Exchange):
         #      }
         #
         timestamp = self.safe_timestamp(response, 'timestamp')
-        return self.parse_order_book(response, timestamp)
+        return self.parse_order_book(response, symbol, timestamp)
 
     async def fetch_trades(self, symbol, since=None, limit=None, params={}):
         await self.load_markets()

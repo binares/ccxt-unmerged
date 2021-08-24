@@ -276,7 +276,7 @@ class bcio (Exchange):
         if limit is not None:
             request['limit'] = limit
         response = self.publicGetDepth(self.extend(request, params))
-        orderbook = self.parse_order_book(response)
+        orderbook = self.parse_order_book(response, symbol)
         orderbook['nonce'] = self.safe_integer(response, 'lastUpdateId')
         return orderbook
 

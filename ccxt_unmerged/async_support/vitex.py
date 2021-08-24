@@ -329,7 +329,7 @@ class vitex(Exchange):
             request['limit'] = limit  # default 100
         response = await self.publicGetDepth(self.extend(request, params))
         depth = self.safe_value(response, 'data')
-        orderbook = self.parse_order_book(depth)
+        orderbook = self.parse_order_book(depth, symbol)
         orderbook['nonce'] = self.safe_integer(depth, 'timestamp')
         return orderbook
 

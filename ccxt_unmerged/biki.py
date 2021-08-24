@@ -191,7 +191,7 @@ class biki(Exchange):
         response = self.publicGetMarketDept(self.extend(request, params))
         data = self.safe_value(response, 'data')
         orderbook = self.safe_value(data, 'tick')
-        return self.parse_order_book(orderbook)
+        return self.parse_order_book(orderbook, symbol)
 
     def parse_ohlcv(self, ohlcv, market=None, timeframe='1m', since=None, limit=None):
         # they return [Timestamp, Volume, Close, High, Low, Open]

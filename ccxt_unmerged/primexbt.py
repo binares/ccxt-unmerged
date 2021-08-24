@@ -183,7 +183,7 @@ class primexbt(Exchange):
             key = keys[i]
             # Each price has two entries with identical volumes; drop the duplicates
             response[key] = self.to_array(self.index_by(response[key], 0))
-        return self.parse_order_book(response, None, 'bids', 'sells')
+        return self.parse_order_book(response, symbol, None, 'bids', 'sells')
 
     def sign(self, path, api='public', method='GET', params={}, headers=None, body=None):
         url = self.urls['api'][api] + '/' + self.version + '/' + path

@@ -9,7 +9,7 @@ is_python_2 = sys.version_info < (3, 0)
 
 setup(
    name='ccxt-unmerged',
-   version='2.1',
+   version='2.2',
    description="Some 40 exchanges that haven't been merged into ccxt yet.",
    long_description=README,
    long_description_content_type='text/markdown',

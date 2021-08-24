@@ -119,7 +119,7 @@ class foblgate(Exchange):
         #     datetime: None,
         #     nonce: None
         # }
-        return self.parse_order_book(response, None, 'bids', 'asks', 'price', 'amount')
+        return self.parse_order_book(response, symbol, None, 'bids', 'asks', 'price', 'amount')
 
     def parse_trade(self, trade, market=None):
         #

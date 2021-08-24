@@ -112,7 +112,7 @@ class tokenomy(Exchange):
         orderbook = self.publicGetPairDepth(self.extend({
             'pair': marketId,
         }, params))
-        return self.parse_order_book(orderbook, None, 'buy', 'sell')
+        return self.parse_order_book(orderbook, symbol, None, 'buy', 'sell')
 
     def fetch_ticker(self, symbol, params={}):
         self.load_markets()

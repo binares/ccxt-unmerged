@@ -224,7 +224,7 @@ class felixo(Exchange):
         if limit is not None:
             request['limit'] = limit  # Default 100; max 1000. Valid limits: [5, 10, 20, 50, 100, 500, 1000]
         response = self.publicGetOrderbook(self.extend(request, params))
-        orderbook = self.parse_order_book(response, self.safe_timestamp(response, 'timestamp'))
+        orderbook = self.parse_order_book(response, symbol, self.safe_timestamp(response, 'timestamp'))
         return orderbook
 
     def parse_symbol_id_joined(self, symbolId):

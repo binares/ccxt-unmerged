@@ -217,7 +217,7 @@ class multi(Exchange):
             request['limit'] = limit  # default = 20
         response = await self.publicGetOrderDepth(self.extend(request, params))
         timestamp = self.safe_integer(response, 'timestamp')
-        return self.parse_order_book(response, timestamp * 1000)
+        return self.parse_order_book(response, symbol, timestamp * 1000)
 
     async def fetch_ohlcv(self, symbol, timeframe='1m', since=None, limit=None, params={}):
         await self.load_markets()

@@ -124,7 +124,7 @@ class remitano(Exchange):
         #     "bids": [...],
         #     "asks": [...]
         # }
-        return self.parse_order_book(response)
+        return self.parse_order_book(response, symbol)
 
     async def create_order(self, symbol, type, side, amount, price=None, params={}):
         await self.load_markets()

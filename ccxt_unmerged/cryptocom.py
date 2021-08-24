@@ -193,7 +193,7 @@ class cryptocom(Exchange):
         #        }
         result = self.safe_value(response, 'data', {})
         orderbook = self.safe_value(result, 'tick')
-        return self.parse_order_book(orderbook)
+        return self.parse_order_book(orderbook, symbol)
 
     def parse_ticker(self, ticker, market=None):
         timestamp = self.safe_integer(ticker, 'time')

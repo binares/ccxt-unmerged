@@ -216,7 +216,7 @@ class txbit (bittrex):
         orderbook = self.safe_value(response, 'result')
         if not orderbook:
             raise ExchangeError(self.id + ' publicGetOrderbook() returneded no result ' + self.json(response))
-        return self.parse_order_book(orderbook, None, 'buy', 'sell', 'Rate', 'Quantity')
+        return self.parse_order_book(orderbook, symbol, None, 'buy', 'sell', 'Rate', 'Quantity')
 
     def fetch_order_trades(self, id, symbol=None, since=None, limit=None, params={}):
         # Currently we can't set the makerOrTaker field, but if the user knows the order side then it can be

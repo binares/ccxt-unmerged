@@ -294,7 +294,7 @@ class btse(Exchange):
         method = 'spotv3GetOrderbookL2' if (type == 'spot') else 'futuresv2GetOrderbookL2'
         response = getattr(self, method)(self.extend(request, params))
         timestamp = response['timestamp']
-        orderbook = self.parse_order_book(response, timestamp, 'buyQuote', 'sellQuote', 'price', 'size')
+        orderbook = self.parse_order_book(response, symbol, timestamp, 'buyQuote', 'sellQuote', 'price', 'size')
         orderbook['nonce'] = self.safe_integer(response, 'timestamp')
         return orderbook
 

@@ -271,7 +271,7 @@ class dragonex(Exchange):
             request['limit'] = limit  # default = maximum = 100
         response = self.v1GetMarketDepth(self.extend(request, params))
         data = self.safe_value(response, 'data', {})
-        return self.parse_order_book(data, None, 'buys', 'sells', 'price', 'volume')
+        return self.parse_order_book(data, symbol, None, 'buys', 'sells', 'price', 'volume')
 
     def parse_ticker(self, ticker, market=None):
         ticker = self.safe_value(self.safe_value(ticker, 'data', {}), 'list', [])[0]

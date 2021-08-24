@@ -225,7 +225,7 @@ class bitclude(Exchange):
         response = await self.publicGetStatsOrderbookBaseQuoteJson(self.extend(request, params))
         data = self.safe_value(response, 'data')
         timestamp = self.safe_timestamp(data, 'timestamp')
-        parsedOrderBook = self.parse_order_book(response, timestamp, 'bids', 'asks', 1, 0)
+        parsedOrderBook = self.parse_order_book(response, symbol, timestamp, 'bids', 'asks', 1, 0)
         if limit is not None:
             parsedOrderBook['bids'] = self.filter_by_since_limit(parsedOrderBook['bids'], None, limit)
             parsedOrderBook['asks'] = self.filter_by_since_limit(parsedOrderBook['asks'], None, limit)

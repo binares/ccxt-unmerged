@@ -170,7 +170,7 @@ class bkex(Exchange):
             request['size'] = limit
         response = self.publicGetQDepth(self.extend(request, params))
         data = self.safe_value(response, 'data')
-        return self.parse_order_book(data, None, 'bids', 'asks', 'price', 'amt')
+        return self.parse_order_book(data, symbol, None, 'bids', 'asks', 'price', 'amt')
 
     def fetch_balance(self, params={}):
         self.load_markets()

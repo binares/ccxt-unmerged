@@ -260,7 +260,7 @@ class coinbene(Exchange):
         response = self.publicGetMarketOrderBook( self.extend(request, params))
         orderBook = response['data']
         timestamp = self.parse8601(self.safe_string(orderBook, 'timestamp'))
-        return self.parse_order_book(orderBook, timestamp)
+        return self.parse_order_book(orderBook, symbol, timestamp)
         return orderBook
 
     def fetch_ticker(self, symbol, params={}):

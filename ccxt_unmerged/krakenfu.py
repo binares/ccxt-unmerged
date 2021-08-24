@@ -282,7 +282,7 @@ class krakenfu(Exchange):
         #    },
         # }
         timestamp = self.parse8601(response['serverTime'])
-        return self.parse_order_book(response['orderBook'], timestamp)
+        return self.parse_order_book(response['orderBook'], symbol, timestamp)
 
     def fetch_tickers(self, symbols=None, params={}):
         self.load_markets()

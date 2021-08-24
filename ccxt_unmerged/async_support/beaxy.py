@@ -377,9 +377,9 @@ class beaxy(Exchange):
         #
         result = self.safe_value(response, 'entries', [])
         timestamp = self.safe_integer(response, 'timestamp')
-        return self.parse_order_book(result, timestamp, 'Buy', 'Sell', 'price', 'quantity')
+        return self.parse_order_book(result, symbol, timestamp, 'Buy', 'Sell', 'price', 'quantity')
 
-    def parse_order_book(self, orderbook, timestamp=None, bidsKey='Buy', asksKey='Sell', priceKey='price', amountKey='size'):
+    def parse_order_book(self, orderbook, symbol, timestamp=None, bidsKey='Buy', asksKey='Sell', priceKey='price', amountKey='size'):
         bids = []
         asks = []
         for i in range(0, len(orderbook)):
@@ -390,6 +390,7 @@ class beaxy(Exchange):
             else:
                 bids.append(self.parse_bid_ask(bidask, priceKey, amountKey))
         return {
+            'symbol': symbol,
             'bids': self.sort_by(bids, 0, True),
             'asks': self.sort_by(asks, 0),
             'timestamp': timestamp,

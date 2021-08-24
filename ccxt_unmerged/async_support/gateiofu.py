@@ -298,7 +298,7 @@ class gateiofu(Exchange):
         #      }
         #    ]
         #  }
-        return self.parse_order_book(response, None, 'bids', 'asks', 'p', 's')
+        return self.parse_order_book(response, symbol, None, 'bids', 'asks', 'p', 's')
 
     def parse_ohlcv(self, ohlcv, market=None, timeframe='1m', since=None, limit=None):
         volume = None

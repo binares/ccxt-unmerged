@@ -239,7 +239,7 @@ class vinex(Exchange):
         }
         orderbook = await self.publicGetGetOrderBook(self.extend(request, params))
         timestamp = self.milliseconds()
-        return self.parse_order_book(orderbook, timestamp, 'bids', 'asks', 'price', 'quantity')
+        return self.parse_order_book(orderbook, symbol, timestamp, 'bids', 'asks', 'price', 'quantity')
 
     def parse_trade(self, trade, market=None):
         timestamp = trade['createdAt'] * 1000

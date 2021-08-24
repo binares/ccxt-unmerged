@@ -227,7 +227,7 @@ class yunex(Exchange):
         if limit is not None:
             request['level'] = limit
         response = await self.publicGetApiMarketDepth(self.extend(request, params))
-        return self.parse_order_book(response['data'])
+        return self.parse_order_book(response['data'], symbol)
 
     def parse_ohlcv(self, ohlcv, market=None, timeframe='1m', since=None, limit=None):
         return [

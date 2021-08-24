@@ -291,7 +291,7 @@ class tokensnet (Exchange):
         #        ]
         #    }
         timestamp = self.safe_timestamp(orderbook, 'timestamp')
-        parsedOrderbook = self.parse_order_book(orderbook, timestamp, 'bids', 'asks', 1, 0)
+        parsedOrderbook = self.parse_order_book(orderbook, symbol, timestamp, 'bids', 'asks', 1, 0)
         parsedOrderbook['nonce'] = self.nonce()
         return parsedOrderbook
 

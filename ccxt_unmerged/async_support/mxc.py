@@ -207,7 +207,7 @@ class mxc(Exchange):
         }
         response = await self.publicGetDepth(self.extend(request, params))
         orderbook = self.safe_value(response, 'data')
-        return self.parse_order_book(orderbook, None, 'bids', 'asks', 'price', 'quantity')
+        return self.parse_order_book(orderbook, symbol, None, 'bids', 'asks', 'price', 'quantity')
 
     def parse_ohlcv(self, ohlcv, market=None, timeframe='1m', since=None, limit=None):
         # they return [Timestamp, Volume, Close, High, Low, Open]

@@ -181,7 +181,7 @@ class bitkub(Exchange):
         lastBidTime = orderbook['bids'][0][1]
         lastAskTime = orderbook['asks'][0][1]
         timestamp = lastBidTime if (lastBidTime > lastAskTime) else lastAskTime
-        return self.parse_order_book(orderbook, timestamp * 1000, 'bids', 'asks', 3, 4)
+        return self.parse_order_book(orderbook, symbol, timestamp * 1000, 'bids', 'asks', 3, 4)
 
     def parse_ticker(self, ticker, market=None):
         symbol = None

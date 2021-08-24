@@ -251,7 +251,7 @@ class bitopro(Exchange):
             limit = 5
             request['limit'] = limit
         response = self.publicGetOrderBookPair(self.extend(request, params))
-        return self.parse_order_book(response, timestamp, 'bids', 'asks', 'price', 'amount')
+        return self.parse_order_book(response, symbol, timestamp, 'bids', 'asks', 'price', 'amount')
 
     def parse_ticker(self, ticker, market=None):
         timestamp = self.milliseconds()

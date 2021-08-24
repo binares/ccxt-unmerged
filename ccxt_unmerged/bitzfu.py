@@ -430,7 +430,7 @@ class bitzfu(bitz):
         #  }
         orderbook = self.safe_value(response, 'data')
         timestamp = self.parseMicrotime(self.safe_string(response, 'microtime'))
-        return self.parse_order_book(orderbook, timestamp, 'bids', 'asks', 'price', 'amount')
+        return self.parse_order_book(orderbook, symbol, timestamp, 'bids', 'asks', 'price', 'amount')
 
     def parse_trade(self, trade, market=None):
         #

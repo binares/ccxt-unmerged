@@ -259,7 +259,7 @@ class nominex(Exchange):
                 asks.append(priceLevel)
             else:
                 bids.append(priceLevel)
-        return self.parse_order_book({'asks': asks, 'bids': bids}, None, 'bids', 'asks', 'price', 'amount')
+        return self.parse_order_book({'asks': asks, 'bids': bids}, symbol, None, 'bids', 'asks', 'price', 'amount')
 
     async def fetch_tickers(self, symbols=None, params={}):
         await self.load_markets()

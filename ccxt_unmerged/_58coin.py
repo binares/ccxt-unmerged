@@ -287,7 +287,7 @@ class _58coin(Exchange):
         if limit is not None:
             request['limit'] = limit  # default 60
         response = self.publicGetOrderBook(self.extend(request, params))
-        orderbook = self.parse_order_book(self.safe_value(response, 'data', {}))
+        orderbook = self.parse_order_book(self.safe_value(response, 'data', {}), symbol)
         return orderbook
 
     def nonce(self):

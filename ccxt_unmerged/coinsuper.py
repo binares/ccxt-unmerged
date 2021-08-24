@@ -199,7 +199,7 @@ class coinsuper(Exchange):
         response = self.privatePostMarketOrderBook(self.extend(request, params))
         orderbook = self.safe_value(response['data'], 'result', {})
         timeStamp = self.safe_value(response['data'], 'timestamp', {})
-        return self.parse_order_book(orderbook, timeStamp, 'bids', 'asks', 'limitPrice', 'quantity')
+        return self.parse_order_book(orderbook, symbol, timeStamp, 'bids', 'asks', 'limitPrice', 'quantity')
 
     def fetch_ohlcv(self, symbol, timeframe='5m', since=None, limit=None, params={}):
         if symbol is None:

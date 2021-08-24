@@ -178,7 +178,7 @@ class tradeogre(Exchange):
         # parseOrderBook in python won't you do parseBidsAsks on non-array bidasks, hence it must be done here
         response['bids'] = self.parse_order_book_branch(self.safe_value(response, 'buy', {}))
         response['asks'] = self.parse_order_book_branch(self.safe_value(response, 'sell', {}))
-        return self.parse_order_book(response)
+        return self.parse_order_book(response, symbol)
 
     def parse_order_book_branch(self, bidasks, priceKey=None, amountKey=None):
         if isinstance(bidasks, list):
