@@ -12,7 +12,6 @@ from .bitforexfu import bitforexfu
 from .bitkub import bitkub
 from .bitopro import bitopro
 from .bitrue import bitrue
-from .bitzfu import bitzfu
 from .bkex import bkex
 from .btse import btse
 from .ceo import ceo
