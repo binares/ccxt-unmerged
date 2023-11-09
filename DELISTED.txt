@@ -1,0 +1,41 @@
+added to ccxt:
+ - bitopro
+ - bitrue
+ - cryptocom
+ - wazirx
+
+out of service:
+ - _58coin
+ - bcio
+ - beaxy
+ - biki
+ - bkex
+ - ceo
+ - coinbene !!
+ - coinsuper
+ - cossdex
+ - dragonex
+ - duedex
+ - multi
+ - mxc
+ - silgonex
+ - tokensnet
+ - txbit
+ - vinex
+
+delisted from ccxt:
+ - bw !!
+ - southxchange !!
+ - (zb)
+
+API BROKEN:
+ - bitforexfu ??
+ - bitkub
+      > AttributeError: 'bitkub' object has no attribute 'publicGetApiMarketSymbols'
+      ccxt changed the attribute initiation procedure?
+ - changellypro
+
+MOVED:
+ - bitclude -> https://egera.com/
+    - API?
+
