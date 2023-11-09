@@ -14,118 +14,120 @@ from ccxt.base.errors import InvalidOrder
 
 
 class slicex(Exchange):
-
     def describe(self):
-        return self.deep_extend(super(slicex, self).describe(), {
-            'id': 'slicex',
-            'name': 'Slicex',
-            'countries': ['MK'],  # North Macedonia
-            'rateLimit': 1000,
-            'certified': False,
-            'has': {
-                'CORS': True,
-                'cancelOrder': False,  # todo
-                'createLimitOrder': False,  # todo
-                'createMarketOrder': False,  # todo
-                'createOrder': False,  # todo
-                'editOrder': False,  # todo
-                'withdraw': False,  # todo
-                'fetchTrades': False,
-                'fetchTickers': True,
-                'fetchTicker': True,
-                'fetchOrders': False,
-                'fetchOHLCV': True,
-                'fetchClosedOrders': True,
-                'fetchOpenOrders': True,
-                'fetchWithdrawals': True,
-                'fetchOrderTrades': False,
-                'fetchLedger': True,
-                'fetchDepositAddress': True,
-            },
-            'timeframes': {
-                '1h': '1h',
-                '4h': '4h',
-                '8h': '8h',
-                '1d': '1d',
-            },
-            'hostname': 'x.slicex.cc',
-            'urls': {
-                'logo': 'https://raw.githubusercontent.com/slicecoincore/graphics/master/Slicex%20logo/ccxt/Slicex.jpg',
-                'api': {
-                    'v3Private': 'https://{hostname}/api/v3/private',
-                    'v3Public': 'https://{hostname}/api/v3/public',
+        return self.deep_extend(
+            super(slicex, self).describe(),
+            {
+                "id": "slicex",
+                "name": "Slicex",
+                "countries": ["MK"],  # North Macedonia
+                "rateLimit": 1000,
+                "certified": False,
+                "has": {
+                    "CORS": True,
+                    "cancelOrder": False,  # todo
+                    "createLimitOrder": False,  # todo
+                    "createMarketOrder": False,  # todo
+                    "createOrder": False,  # todo
+                    "editOrder": False,  # todo
+                    "withdraw": False,  # todo
+                    "fetchTrades": False,
+                    "fetchTickers": True,
+                    "fetchTicker": True,
+                    "fetchOrders": False,
+                    "fetchOHLCV": True,
+                    "fetchClosedOrders": True,
+                    "fetchOpenOrders": True,
+                    "fetchWithdrawals": True,
+                    "fetchOrderTrades": False,
+                    "fetchLedger": True,
+                    "fetchDepositAddress": True,
                 },
-                'www': ['https://slicex.cc'],
-                'doc': [
-                    'https://slicex.cc/api.html',
-                ],
-                'fees': 'https://slicex.cc/fees.html',
-            },
-            'api': {
-                'v3Public': {
-                    'get': [
-                        'getassets',
-                        'getmarkets',
-                        'getticker',
-                        'getmarketsummary',
-                        'getmarketsummaries',
-                        'getorderbook',
-                        'getmarkethistory',
-                        'getcandles',
+                "timeframes": {
+                    "1h": "1h",
+                    "4h": "4h",
+                    "8h": "8h",
+                    "1d": "1d",
+                },
+                "hostname": "x.slicex.cc",
+                "urls": {
+                    "logo": "https://raw.githubusercontent.com/slicecoincore/graphics/master/Slicex%20logo/ccxt/Slicex.jpg",
+                    "api": {
+                        "v3Private": "https://{hostname}/api/v3/private",
+                        "v3Public": "https://{hostname}/api/v3/public",
+                    },
+                    "www": ["https://slicex.cc"],
+                    "doc": [
+                        "https://slicex.cc/api.html",
                     ],
+                    "fees": "https://slicex.cc/fees.html",
                 },
-                'v3Private': {
-                    'get': [
-                        'statement',
-                    ],
-                    'post': [
-                        'getbalance',
-                        'getbalances',
-                        'buylimit',
-                        'selllimit',
-                        'buylimitami',
-                        'selllimitami',
-                        'buystoplimit',
-                        'sellstoplimit',
-                        'ordercancel',
-                        'getopenorders',
-                        'getcloseorders',
-                        'getdeposithistory',
-                        'getdepositaddress',
-                        'getmytransactions',
-                        'withdraw',
-                        'directtransfer',
-                        'getwithdrawhistory',
-                        'getlimits',
-                    ],
+                "api": {
+                    "v3Public": {
+                        "get": [
+                            "getassets",
+                            "getmarkets",
+                            "getticker",
+                            "getmarketsummary",
+                            "getmarketsummaries",
+                            "getorderbook",
+                            "getmarkethistory",
+                            "getcandles",
+                        ],
+                    },
+                    "v3Private": {
+                        "get": [
+                            "statement",
+                        ],
+                        "post": [
+                            "getbalance",
+                            "getbalances",
+                            "buylimit",
+                            "selllimit",
+                            "buylimitami",
+                            "selllimitami",
+                            "buystoplimit",
+                            "sellstoplimit",
+                            "ordercancel",
+                            "getopenorders",
+                            "getcloseorders",
+                            "getdeposithistory",
+                            "getdepositaddress",
+                            "getmytransactions",
+                            "withdraw",
+                            "directtransfer",
+                            "getwithdrawhistory",
+                            "getlimits",
+                        ],
+                    },
+                },
+                "commonCurrencies": {
+                    # 'BTC': 'Bitcoin',  # why?
+                },
+                "exceptions": {
+                    "exact": {
+                        "ERR_INSUFICIENT_BALANCE": InsufficientFunds,
+                        "ERR_LOW_VOLUME": BadRequest,
+                    },
+                    "broad": {
+                        "Order is not open": InvalidOrder,
+                        "Invalid Account / Api KEY / Api Secret": AuthenticationError,  # also happens when an invalid nonce is used
+                    },
+                },
+                "fees": {
+                    "trading": {
+                        "tierBased": False,
+                        "percentage": True,
+                        "taker": 0.2 / 100,
+                        "maker": 0.1 / 100,
+                    },
+                },
+                "options": {
+                    "parseOrderStatus": True,
+                    "symbolSeparator": "_",
                 },
             },
-            'commonCurrencies': {
-                # 'BTC': 'Bitcoin',  # why?
-            },
-            'exceptions': {
-                'exact': {
-                    'ERR_INSUFICIENT_BALANCE': InsufficientFunds,
-                    'ERR_LOW_VOLUME': BadRequest,
-                },
-                'broad': {
-                    'Order is not open': InvalidOrder,
-                    'Invalid Account / Api KEY / Api Secret': AuthenticationError,  # also happens when an invalid nonce is used
-                },
-            },
-            'fees': {
-                'trading': {
-                    'tierBased': False,
-                    'percentage': True,
-                    'taker': 0.2 / 100,
-                    'maker': 0.1 / 100,
-                },
-            },
-            'options': {
-                'parseOrderStatus': True,
-                'symbolSeparator': '_',
-            },
-        })
+        )
         # undocumented api calls
         # https://x.slicex.cc/api/v3/public/tradingview/symbols?symbol=ETH_BTC
         # https://x.slicex.cc/api/v3/public/tradingview/config
@@ -135,7 +137,7 @@ class slicex(Exchange):
 
     async def fetch_currencies(self, params={}):
         response = await self.v3PublicGetGetassets(params)
-        items = response['result']
+        items = response["result"]
         result = {}
         for i in range(0, len(items)):
             #   {Asset: 'USDT',
@@ -157,17 +159,18 @@ class slicex(Exchange):
             #     CurrencyLong: 'Tether',
             #     CoinType: 'ETHERC20'}
             item = items[i]
-            id = self.safe_string(item, 'Asset')
+            id = self.safe_string(item, "Asset")
             code = self.safe_currency_code(id)
             result[code] = {
-                'id': id,
-                'code': code,
-                'name': self.safe_string(item, 'AssetLong'),
-                'active': self.safe_value(item, 'IsActive') and not self.safe_value(item, 'MaintenanceMode'),
-                'fee': self.safe_float(item, 'WithdrawTxFee'),
-                'precision': self.safe_float(item, 'DecimalPlaces'),
-                'info': item,
-                'limits': self.limits,
+                "id": id,
+                "code": code,
+                "name": self.safe_string(item, "AssetLong"),
+                "active": self.safe_value(item, "IsActive")
+                and not self.safe_value(item, "MaintenanceMode"),
+                "fee": self.safe_float(item, "WithdrawTxFee"),
+                "precision": self.safe_float(item, "DecimalPlaces"),
+                "info": item,
+                "limits": self.limits,
             }
         return result
 
@@ -175,7 +178,7 @@ class slicex(Exchange):
         # https://github.com/ccxt/ccxt/issues/5668
         response = await self.v3PublicGetGetmarkets(params)
         result = []
-        markets = self.safe_value(response, 'result')
+        markets = self.safe_value(response, "result")
         for i in range(0, len(markets)):
             market = markets[i]
             #   {MarketName: 'LTC_USDT',
@@ -190,75 +193,81 @@ class slicex(Exchange):
             #     BaseCurrency: 'USDT',
             #     MarketCurrencyLong: 'Litecoin',
             #     BaseCurrencyLong: 'Tether'}
-            id = self.safe_string(market, 'MarketName')
-            baseId = self.safe_string(market, 'MarketAsset')
-            quoteId = self.safe_string(market, 'BaseAsset')
+            id = self.safe_string(market, "MarketName")
+            baseId = self.safe_string(market, "MarketAsset")
+            quoteId = self.safe_string(market, "BaseAsset")
             base = self.safe_currency_code(baseId)
             quote = self.safe_currency_code(quoteId)
-            symbol = base + '/' + quote
+            symbol = base + "/" + quote
             precision = {
-                'amount': 8,
-                'price': 8,
+                "amount": 8,
+                "price": 8,
             }
-            active = self.safe_value(market, 'IsActive', False)
-            result.append({
-                'id': id,
-                'symbol': symbol,
-                'base': base,
-                'quote': quote,
-                'baseId': baseId,
-                'quoteId': quoteId,
-                'active': active,
-                'info': market,
-                'precision': precision,
-                'maker': self.fees['trading']['maker'],
-                'taker': self.fees['trading']['taker'],
-                'limits': {
-                    'amount': {
-                        'min': self.safe_float(market, 'MinTradeSize'),
-                        'max': None,
+            active = self.safe_value(market, "IsActive", False)
+            result.append(
+                {
+                    "id": id,
+                    "symbol": symbol,
+                    "base": base,
+                    "quote": quote,
+                    "baseId": baseId,
+                    "quoteId": quoteId,
+                    "active": active,
+                    "info": market,
+                    "precision": precision,
+                    "maker": self.fees["trading"]["maker"],
+                    "taker": self.fees["trading"]["taker"],
+                    "limits": {
+                        "amount": {
+                            "min": self.safe_float(market, "MinTradeSize"),
+                            "max": None,
+                        },
+                        "price": {
+                            "min": math.pow(10, -precision["price"]),
+                            "max": None,
+                        },
                     },
-                    'price': {
-                        'min': math.pow(10, -precision['price']),
-                        'max': None,
-                    },
-                },
-            })
+                }
+            )
         return result
 
     async def fetch_order_book(self, symbol, limit=None, params={}):
         await self.load_markets()
         request = {
-            'market': self.market_id(symbol),
-            'type': 'ALL',
+            "market": self.market_id(symbol),
+            "type": "ALL",
         }
         if limit is not None:
-            request['depth'] = limit  # 50
+            request["depth"] = limit  # 50
         response = await self.v3PublicGetGetorderbook(self.extend(request, params))
-        orderbook = self.safe_value(response, 'result')
+        orderbook = self.safe_value(response, "result")
         if not orderbook:
-            raise ExchangeError(self.id + ' no orderbook data in ' + self.json(response))
-        return self.parse_order_book(orderbook, symbol, None, 'buy', 'sell', 'Rate', 'Quantity')
+            raise ExchangeError(
+                self.id + " no orderbook data in " + self.json(response)
+            )
+        return self.parse_order_book(
+            orderbook, symbol, None, "buy", "sell", "Rate", "Quantity"
+        )
 
     async def fetch_ticker(self, symbol, params={}):
         await self.load_markets()
         market = self.market(symbol)
         request = {
-            'market': market['id'],
+            "market": market["id"],
         }
         response = await self.v3PublicGetGetmarketsummary(self.extend(request, params))
-        ticker = response['result']
+        ticker = response["result"]
         return self.parse_ticker(ticker, market)
 
     async def fetch_tickers(self, symbols=None, params={}):
         await self.load_markets()
         response = await self.v3PublicGetGetmarketsummaries(params)
-        result = self.safe_value(response, 'result')
+        result = self.safe_value(response, "result")
         tickers = []
         for i in range(0, len(result)):
             ticker = self.parse_ticker(result[i])
             tickers.append(ticker)
-        return self.filter_by_array(tickers, 'symbol', symbols)
+        return self.filter_by_array(tickers, "symbol", symbols)
 
     def parse_ticker(self, ticker, market=None):
         #   {TimeStamp: '2020-01-14 14:32:28',
@@ -280,18 +289,18 @@ class slicex(Exchange):
         #     InfoMessage: '',
         #     MarketCurrency: 'Litecoin',
         #     BaseCurrency: 'Tether'}
-        timestamp = self.parse8601(self.safe_string(ticker, 'TimeStamp'))
+        timestamp = self.parse8601(self.safe_string(ticker, "TimeStamp"))
         symbol = None
-        marketId = self.safe_string(ticker, 'MarketName')
+        marketId = self.safe_string(ticker, "MarketName")
         if marketId is not None:
             if marketId in self.markets_by_id:
                 market = self.markets_by_id[marketId]
             else:
                 symbol = self.parse_symbol(marketId)
         if (symbol is None) and (market is not None):
-            symbol = market['symbol']
-        previous = self.safe_float(ticker, 'PrevDay')
-        last = self.safe_float(ticker, 'Last')
+            symbol = market["symbol"]
+        previous = self.safe_float(ticker, "PrevDay")
+        last = self.safe_float(ticker, "Last")
         change = None
         percentage = None
         if last is not None:
@@ -300,64 +309,66 @@ class slicex(Exchange):
                 if previous > 0:
                     percentage = (change / previous) * 100
         return {
-            'symbol': symbol,
-            'timestamp': timestamp,
-            'datetime': self.iso8601(timestamp),
-            'high': self.safe_float(ticker, 'High'),
-            'low': self.safe_float(ticker, 'Low'),
-            'bid': self.safe_float(ticker, 'Bid'),
-            'bidVolume': None,
-            'ask': self.safe_float(ticker, 'Ask'),
-            'askVolume': None,
-            'vwap': None,
-            'open': previous,
-            'close': last,
-            'last': last,
-            'previousClose': None,
-            'change': change,
-            'percentage': percentage,
-            'average': None,
-            'baseVolume': self.safe_float(ticker, 'Volume'),
-            'quoteVolume': self.safe_float(ticker, 'BaseVolume'),
-            'info': ticker,
+            "symbol": symbol,
+            "timestamp": timestamp,
+            "datetime": self.iso8601(timestamp),
+            "high": self.safe_float(ticker, "High"),
+            "low": self.safe_float(ticker, "Low"),
+            "bid": self.safe_float(ticker, "Bid"),
+            "bidVolume": None,
+            "ask": self.safe_float(ticker, "Ask"),
+            "askVolume": None,
+            "vwap": None,
+            "open": previous,
+            "close": last,
+            "last": last,
+            "previousClose": None,
+            "change": change,
+            "percentage": percentage,
+            "average": None,
+            "baseVolume": self.safe_float(ticker, "Volume"),
+            "quoteVolume": self.safe_float(ticker, "BaseVolume"),
+            "info": ticker,
         }
 
-    def parse_ohlcv(self, ohlcv, market=None, timeframe='1d', since=None, limit=None):
-        timestamp = self.parse8601(ohlcv['TimeStamp'] + '+00:00')
+    def parse_ohlcv(self, ohlcv, market=None, timeframe="1d", since=None, limit=None):
+        timestamp = self.parse8601(ohlcv["TimeStamp"] + "+00:00")
         return [
             timestamp,
-            self.safe_float(ohlcv, 'Open'),
-            self.safe_float(ohlcv, 'High'),
-            self.safe_float(ohlcv, 'Low'),
-            self.safe_float(ohlcv, 'Close'),
-            self.safe_float(ohlcv, 'Volume'),
+            self.safe_float(ohlcv, "Open"),
+            self.safe_float(ohlcv, "High"),
+            self.safe_float(ohlcv, "Low"),
+            self.safe_float(ohlcv, "Close"),
+            self.safe_float(ohlcv, "Volume"),
         ]
 
-    async def fetch_ohlcv(self, symbol, timeframe='1d', since=None, limit=None, params={}):
+    async def fetch_ohlcv(
+        self, symbol, timeframe="1d", since=None, limit=None, params={}
+    ):
         await self.load_markets()
         market = self.market(symbol)
         request = {
-            'period': self.timeframes[timeframe],
-            'market': market['id'],
-            'count': limit,
+            "period": self.timeframes[timeframe],
+            "market": market["id"],
+            "count": limit,
         }
         response = await self.v3PublicGetGetcandles(self.extend(request, params))
-        result = self.safe_value(response, 'result', [])
+        result = self.safe_value(response, "result", [])
         return self.parse_ohlcvs(result, market, timeframe, since, limit)
 
     async def create_order(self, symbol, type, side, amount, price=None, params={}):
-        if type != 'limit':
+        if type != "limit":
             # todo: STOP-LIMIT and AMI order types are supported
-            raise InvalidOrder(self.id + ' allows limit orders only')
+            raise InvalidOrder(self.id + " allows limit orders only")
         await self.load_markets()
         request = {
-            'rate': self.price_to_precision(symbol, price),
-            'quantity': self.amount_to_precision(symbol, amount),
-            'tradeType': '1' if (side == 'buy') else '0',
-            'market': self.market_id(symbol),
+            "rate": self.price_to_precision(symbol, price),
+            "quantity": self.amount_to_precision(symbol, amount),
+            "tradeType": "1" if (side == "buy") else "0",
+            "market": self.market_id(symbol),
         }
         response = None
-        if side == 'buy':
+        if side == "buy":
             response = await self.v3PrivatePostBuylimit(self.extend(request, params))
         else:
             response = await self.v3PrivatePostSelllimit(self.extend(request, params))
@@ -365,13 +376,13 @@ class slicex(Exchange):
         #     message: "",
         #     result: "161105236"},
         return {
-            'info': response,
-            'id': self.safe_string(response, 'result'),
+            "info": response,
+            "id": self.safe_string(response, "result"),
         }
 
     async def cancel_order(self, id, symbol=None, params={}):
         request = {
-            'orderid': id,
+            "orderid": id,
         }
         response = await self.v3PrivatePostOrdercancel(self.extend(request, params))
         # {success: True, message: '', result: ''}
@@ -383,29 +394,29 @@ class slicex(Exchange):
         request = {}
         if symbol is not None:
             market = self.market(symbol)
-            request['market'] = market['id']
+            request["market"] = market["id"]
         response = await self.v3PrivatePostGetopenorders(self.extend(request, params))
-        items = self.safe_value(response, 'result', [])
+        items = self.safe_value(response, "result", [])
         return self.parse_orders(items, market, since, limit)
 
     def parse_symbol(self, id):
-        base, quote = id.split(self.options['symbolSeparator'])
+        base, quote = id.split(self.options["symbolSeparator"])
         base = self.safe_currency_code(base)
         quote = self.safe_currency_code(quote)
-        return base + '/' + quote
+        return base + "/" + quote
 
     async def fetch_balance(self, params={}):
         await self.load_markets()
         response = await self.v3PrivatePostGetbalances(params)
-        result = {'info': response}
-        items = response['result']
+        result = {"info": response}
+        items = response["result"]
         for i in range(0, len(items)):
             item = items[i]
-            currencyId = self.safe_string(item, 'Asset')
+            currencyId = self.safe_string(item, "Asset")
             code = self.safe_currency_code(currencyId)
             account = self.account()
-            account['free'] = self.safe_float(item, 'Available')
-            account['total'] = self.safe_float(item, 'Balance')
+            account["free"] = self.safe_float(item, "Available")
+            account["total"] = self.safe_float(item, "Balance")
             result[code] = account
         return self.parse_balance(result)
 
@@ -415,30 +426,38 @@ class slicex(Exchange):
         market = None
         if symbol is not None:
             market = self.market(symbol)
-            request['market'] = market['id']
+            request["market"] = market["id"]
         response = await self.v3PrivatePostGetcloseorders(self.extend(request, params))
-        orders = self.safe_value(response, 'result', [])
+        orders = self.safe_value(response, "result", [])
         return self.parse_orders(orders, market, since, limit)
 
-    async def fetch_transactions_with_method(self, method, code=None, since=None, limit=None, params={}):
+    async def fetch_transactions_with_method(
+        self, method, code=None, since=None, limit=None, params={}
+    ):
         await self.load_markets()
         response = await getattr(self, method)(params)
-        transactions = self.safe_value(response, 'result', [])
+        transactions = self.safe_value(response, "result", [])
         return self.parse_transactions(transactions, code, since, limit)
 
     async def fetch_deposits(self, code=None, since=None, limit=None, params={}):
-        return await self.fetch_transactions_with_method('v3PrivatePostGetdeposithistory', code, since, limit, params)
+        return await self.fetch_transactions_with_method(
+            "v3PrivatePostGetdeposithistory", code, since, limit, params
+        )
 
     async def fetch_withdrawals(self, code=None, since=None, limit=None, params={}):
-        return await self.fetch_transactions_with_method('v3PrivatePostGetwithdrawhistory', code, since, limit, params)
+        return await self.fetch_transactions_with_method(
+            "v3PrivatePostGetwithdrawhistory", code, since, limit, params
+        )
 
     async def fetch_deposit_address(self, code, params={}):
         await self.load_markets()
         currency = self.currency(code)
         request = {
-            'asset': currency['id'],
+            "asset": currency["id"],
         }
-        response = await self.v3PrivatePostGetdepositaddress(self.extend(request, params))
+        response = await self.v3PrivatePostGetdepositaddress(
+            self.extend(request, params)
+        )
         #   {success: True,
         #     message: '',
         #     result:
@@ -447,20 +466,20 @@ class slicex(Exchange):
         #         DepositAddress: '0x748c5c8jhksjdfhd507d3aa9',
         #         Currency: 'ETH',
         #         CurrencyName: 'Ethereum'}}
-        item = response['result']
-        address = self.safe_string(item, 'DepositAddress')
+        item = response["result"]
+        address = self.safe_string(item, "DepositAddress")
         return {
-            'currency': code,
-            'address': self.check_address(address),
+            "currency": code,
+            "address": self.check_address(address),
             # 'tag': tag,
-            'info': item,
+            "info": item,
         }
 
     def parse_ledger_entry_type(self, type):
         # deposits don't seem to appear in here
         types = {
-            'TRADE': 'trade',
-            'WITHDRAW': 'transaction',
+            "TRADE": "trade",
+            "WITHDRAW": "transaction",
         }
         return self.safe_string(types, type, type)
 
@@ -509,26 +528,26 @@ class slicex(Exchange):
         #         CoinName: 'Dogecoin'
         #     }
         #
-        code = self.safe_currency_code(self.safe_string(item, 'CoinSymbol'), currency)
-        description = self.safe_string(item, 'Description')
-        type = self.parse_ledger_entry_type(self.safe_string(item, 'Type'))
+        code = self.safe_currency_code(self.safe_string(item, "CoinSymbol"), currency)
+        description = self.safe_string(item, "Description")
+        type = self.parse_ledger_entry_type(self.safe_string(item, "Type"))
         referenceId = None
         fee = None
-        delimiter = ', ' if (type == 'trade') else '; '
+        delimiter = ", " if (type == "trade") else "; "
         parts = description.split(delimiter)
         for i in range(0, len(parts)):
             part = parts[i]
-            if part.find('fee') == 0:
-                part = part.replace('fee ', '')
+            if part.find("fee") == 0:
+                part = part.replace("fee ", "")
                 feeCost = float(part)
                 if feeCost < 0:
                     feeCost = -feeCost
                 fee = {
-                    'cost': feeCost,
-                    'currency': code,
+                    "cost": feeCost,
+                    "currency": code,
                 }
-            elif part.find('order id') == 0:
-                referenceId = part.replace('order id ', '')
+            elif part.find("order id") == 0:
+                referenceId = part.replace("order id ", "")
             #
             # does not belong to Ledger, related to parseTransaction
             #
@@ -538,40 +557,41 @@ class slicex(Exchange):
             #             address = details[1]
             #     }
             #
-        timestamp = self.parse8601(self.safe_string(item, 'TimeStamp'))
-        amount = self.safe_float(item, 'Amount')
+        timestamp = self.parse8601(self.safe_string(item, "TimeStamp"))
+        amount = self.safe_float(item, "Amount")
         direction = None
         if amount is not None:
-            direction = 'in'
+            direction = "in"
             if amount < 0:
-                direction = 'out'
+                direction = "out"
                 amount = -amount
-        id = self.safe_string(item, 'ID')
+        id = self.safe_string(item, "ID")
         return {
-            'id': id,
-            'info': item,
-            'timestamp': timestamp,
-            'datetime': self.iso8601(timestamp),
-            'direction': direction,
-            'account': None,
-            'referenceId': referenceId,
-            'referenceAccount': None,
-            'type': type,
-            'currency': code,
-            'amount': amount,
-            'before': None,
-            'after': None,
-            'status': 'ok',
-            'fee': fee,
+            "id": id,
+            "info": item,
+            "timestamp": timestamp,
+            "datetime": self.iso8601(timestamp),
+            "direction": direction,
+            "account": None,
+            "referenceId": referenceId,
+            "referenceAccount": None,
+            "type": type,
+            "currency": code,
+            "amount": amount,
+            "before": None,
+            "after": None,
+            "status": "ok",
+            "fee": fee,
         }
 
     async def fetch_ledger(self, code=None, since=None, limit=None, params={}):
         await self.load_markets()
         # only seems to return 100 items and there is no documented way to change page size or offset
-        request = {
-        }
-        response = await self.v3PrivatePostGetmytransactions(self.extend(request, params))
-        items = response['result']
+        request = {}
+        response = await self.v3PrivatePostGetmytransactions(
+            self.extend(request, params)
+        )
+        items = response["result"]
         return self.parse_ledger(items, code, since, limit)
 
     def parse_order(self, order, market=None):
@@ -601,26 +621,26 @@ class slicex(Exchange):
         #     Status: 'OPEN',
         #     Created: '2020-01-22 09:21:27',
         #     Comments: {String: '', Valid: True}
-        side = self.safe_string(order, 'Type').lower()
-        status = self.parse_order_status(self.safe_string(order, 'Status'))
+        side = self.safe_string(order, "Type").lower()
+        status = self.parse_order_status(self.safe_string(order, "Status"))
         symbol = None
-        marketId = self.safe_string(order, 'Exchange')
+        marketId = self.safe_string(order, "Exchange")
         if marketId is None:
             if market is not None:
-                symbol = market['symbol']
+                symbol = market["symbol"]
         else:
             if marketId in self.markets_by_id:
                 market = self.markets_by_id[marketId]
-                symbol = market['symbol']
+                symbol = market["symbol"]
             else:
                 symbol = self.parse_symbol(marketId)
         timestamp = None
-        if 'Created' in order:
-            timestamp = self.parse8601(order['Created'] + '+00:00')
-        price = self.safe_float(order, 'Price')
+        if "Created" in order:
+            timestamp = self.parse8601(order["Created"] + "+00:00")
+        price = self.safe_float(order, "Price")
         cost = None
-        amount = self.safe_float(order, 'Quantity')
-        remaining = self.safe_float(order, 'QuantityRemaining')
+        amount = self.safe_float(order, "Quantity")
+        remaining = self.safe_float(order, "QuantityRemaining")
         filled = None
         if amount is not None and remaining is not None:
             filled = amount - remaining
@@ -630,34 +650,34 @@ class slicex(Exchange):
         if not price:
             if cost and filled:
                 price = cost / filled
-        average = self.safe_float(order, 'PricePerUnit')
-        id = self.safe_string(order, 'OrderID')
+        average = self.safe_float(order, "PricePerUnit")
+        id = self.safe_string(order, "OrderID")
         return {
-            'info': order,
-            'id': id,
-            'clientOrderId': None,
-            'timestamp': timestamp,
-            'datetime': self.iso8601(timestamp),
-            'lastTradeTimestamp': None,
-            'symbol': symbol,
-            'type': 'limit',
-            'side': side,
-            'price': price,
-            'cost': cost,
-            'average': average,
-            'amount': amount,
-            'filled': filled,
-            'remaining': remaining,
-            'status': status,
-            'fee': None,
-            'trades': None,
+            "info": order,
+            "id": id,
+            "clientOrderId": None,
+            "timestamp": timestamp,
+            "datetime": self.iso8601(timestamp),
+            "lastTradeTimestamp": None,
+            "symbol": symbol,
+            "type": "limit",
+            "side": side,
+            "price": price,
+            "cost": cost,
+            "average": average,
+            "amount": amount,
+            "filled": filled,
+            "remaining": remaining,
+            "status": status,
+            "fee": None,
+            "trades": None,
         }
 
     def parse_order_status(self, status):
         statuses = {
-            'OK': 'closed',
-            'OPEN': 'open',
-            'CANCELED': 'canceled',
+            "OK": "closed",
+            "OPEN": "open",
+            "CANCELED": "canceled",
         }
         return self.safe_string(statuses, status, status)
 
@@ -685,20 +705,20 @@ class slicex(Exchange):
         #     Label: '0.1089590;35wztHPMgrebFvvblah;0.00100000',
         #     Symbol: 'BTC'}
         #
-        id = self.safe_string(transaction, 'ID')
-        amount = self.safe_float(transaction, 'Amount')
-        type = 'deposit'
+        id = self.safe_string(transaction, "ID")
+        amount = self.safe_float(transaction, "Amount")
+        type = "deposit"
         if amount < 0:
             amount = abs(amount)
-            type = 'withdrawal'
-        currencyId = self.safe_string(transaction, 'Asset')
+            type = "withdrawal"
+        currencyId = self.safe_string(transaction, "Asset")
         code = self.safe_currency_code(currencyId, currency)
-        label = self.safe_string(transaction, 'Label')
-        timestamp = self.parse8601(self.safe_string(transaction, 'Timestamp'))
-        txid = self.safe_string(transaction, 'TransactionID')
+        label = self.safe_string(transaction, "Label")
+        timestamp = self.parse8601(self.safe_string(transaction, "Timestamp"))
+        txid = self.safe_string(transaction, "TransactionID")
         address = None
         feeCost = None
-        labelParts = label.split(';')
+        labelParts = label.split(";")
         if len(labelParts) == 3:
             amount = float(labelParts[0])
             address = labelParts[1]
@@ -708,50 +728,71 @@ class slicex(Exchange):
         fee = None
         if feeCost is not None:
             fee = {
-                'currency': code,
-                'cost': feeCost,
+                "currency": code,
+                "cost": feeCost,
             }
-        status = 'ok'
-        if txid == 'CANCELED':
+        status = "ok"
+        if txid == "CANCELED":
             txid = None
-            status = 'canceled'
+            status = "canceled"
         return {
-            'info': transaction,
-            'timestamp': timestamp,
-            'datetime': self.iso8601(timestamp),
-            'id': id,
-            'currency': code,
-            'amount': amount,
-            'address': address,
-            'tag': None,
-            'status': status,
-            'type': type,
-            'updated': None,
-            'txid': txid,
-            'fee': fee,
+            "info": transaction,
+            "timestamp": timestamp,
+            "datetime": self.iso8601(timestamp),
+            "id": id,
+            "currency": code,
+            "amount": amount,
+            "address": address,
+            "tag": None,
+            "status": status,
+            "type": type,
+            "updated": None,
+            "txid": txid,
+            "fee": fee,
         }
 
     def nonce(self):
         return self.milliseconds()
 
-    def sign(self, path, api='public', method='GET', params={}, headers=None, body=None):
-        url = self.implode_params(self.urls['api'][api], {
-            'hostname': self.hostname,
-        }) + '/'
-        if api == 'v3Private':
+    def sign(
+        self, path, api="public", method="GET", params={}, headers=None, body=None
+    ):
+        url = (
+            self.implode_params(
+                self.urls["api"][api],
+                {
+                    "hostname": self.hostname,
+                },
+            )
+            + "/"
+        )
+        if api == "v3Private":
             self.check_required_credentials()
             request = {
-                'apikey': self.apiKey,
-                'nonce': self.nonce(),
+                "apikey": self.apiKey,
+                "nonce": self.nonce(),
             }
-            url += path + '?' + self.urlencode(self.extend(request, params))
-            signature = self.hmac(self.encode(url), self.encode(self.secret), hashlib.sha512)
-            headers = {'apisign': signature}
+            url += path + "?" + self.urlencode(self.extend(request, params))
+            signature = self.hmac(
+                self.encode(url), self.encode(self.secret), hashlib.sha512
+            )
+            headers = {"apisign": signature}
         else:
-            url += path + '?' + self.urlencode(params)
-        return {'url': url, 'method': method, 'body': body, 'headers': headers}
+            url += path + "?" + self.urlencode(params)
+        return {"url": url, "method": method, "body": body, "headers": headers}
 
-    def handle_errors(self, code, reason, url, method, headers, body, response, requestHeaders, requestBody):
+    def handle_errors(
+        self,
+        code,
+        reason,
+        url,
+        method,
+        headers,
+        body,
+        response,
+        requestHeaders,
+        requestBody,
+    ):
         if response is None:
             return  # fallback to default error handler
         #    examples...
@@ -759,16 +800,26 @@ class slicex(Exchange):
         #    {"success":false,"message":"Error: Very low volume.","result":"ERR_LOW_VOLUME"}
         #    {"success":false,"message":"Error: Insuficient Balance","result":"ERR_INSUFICIENT_BALANCE"}
         #
-        if body[0] == '{':
-            success = self.safe_value(response, 'success')
+        if body[0] == "{":
+            success = self.safe_value(response, "success")
             if success is None:
-                raise ExchangeError(self.id + ': malformed response: ' + self.json(response))
+                raise ExchangeError(
+                    self.id + ": malformed response: " + self.json(response)
+                )
             if not success:
-                feedback = self.id + ' ' + body
-                errorCode = self.safe_string(response, 'result')
-                self.throw_broadly_matched_exception(self.exceptions['broad'], errorCode, feedback)
-                self.throw_exactly_matched_exception(self.exceptions['exact'], errorCode, feedback)
-                errorMessage = self.safe_string(response, 'message')
-                self.throw_broadly_matched_exception(self.exceptions['broad'], errorMessage, feedback)
-                self.throw_exactly_matched_exception(self.exceptions['exact'], errorMessage, feedback)
+                feedback = self.id + " " + body
+                errorCode = self.safe_string(response, "result")
+                self.throw_broadly_matched_exception(
+                    self.exceptions["broad"], errorCode, feedback
+                )
+                self.throw_exactly_matched_exception(
+                    self.exceptions["exact"], errorCode, feedback
+                )
+                errorMessage = self.safe_string(response, "message")
+                self.throw_broadly_matched_exception(
+                    self.exceptions["broad"], errorMessage, feedback
+                )
+                self.throw_exactly_matched_exception(
+                    self.exceptions["exact"], errorMessage, feedback
+                )
                 raise ExchangeError(feedback)

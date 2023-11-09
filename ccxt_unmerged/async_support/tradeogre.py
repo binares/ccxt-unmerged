@@ -9,67 +9,69 @@ from ccxt.base.errors import AuthenticationError
 
 
 class tradeogre(Exchange):
-
     def describe(self):
-        return self.deep_extend(super(tradeogre, self).describe(), {
-            'id': 'tradeogre',
-            'name': 'Trade Ogre',
-            'has': {
-                'loadMarkets': True,
-                'fetchMarkets': True,
-                'fetchCurrencies': True,
-                'fetchTicker': True,
-                'fetchTickers': False,
-                'fetchOHLCV': False,
-                'fetchTrades': False,
-                'fetchBalance': True,
-                'createOrder': False,
-                'cancelOrder': False,
-                'fetchOrder': False,
-                'fetchOrders': False,
-                'fetchOpenOrders': False,
-                'fetchClosedOrders': False,
-                'fetchMyTrades': False,
-                'deposit': False,
-                'withdraw': False,
-            },
-            'urls': {
-                'logo': 'https://tradeogre.com/img/logo.png',
-                'api': {
-                    'web': 'https://tradeogre.com',
-                    'public': 'https://tradeogre.com/api/v1',
-                    'private': 'https://tradeogre.com/api/v1',
+        return self.deep_extend(
+            super(tradeogre, self).describe(),
+            {
+                "id": "tradeogre",
+                "name": "Trade Ogre",
+                "has": {
+                    "loadMarkets": True,
+                    "fetchMarkets": True,
+                    "fetchCurrencies": True,
+                    "fetchTicker": True,
+                    "fetchTickers": False,
+                    "fetchOHLCV": False,
+                    "fetchTrades": False,
+                    "fetchBalance": True,
+                    "createOrder": False,
+                    "cancelOrder": False,
+                    "fetchOrder": False,
+                    "fetchOrders": False,
+                    "fetchOpenOrders": False,
+                    "fetchClosedOrders": False,
+                    "fetchMyTrades": False,
+                    "deposit": False,
+                    "withdraw": False,
                 },
-                'www': 'https://tradeogre.com',
-                'doc': 'https://tradeogre.com/help/api',
-                'fees': [
-                    'https://tradeogre.com/help/fees',
-                ],
-            },
-            'api': {
-                'public': {
-                    'get': [
-                        'markets',
-                        'orders',
-                        'ticker',
-                        'history',
+                "urls": {
+                    "logo": "https://tradeogre.com/img/logo.png",
+                    "api": {
+                        "web": "https://tradeogre.com",
+                        "public": "https://tradeogre.com/api/v1",
+                        "private": "https://tradeogre.com/api/v1",
+                    },
+                    "www": "https://tradeogre.com",
+                    "doc": "https://tradeogre.com/help/api",
+                    "fees": [
+                        "https://tradeogre.com/help/fees",
                     ],
                 },
-                'private': {
-                    'get': [
-                        'account/order',
-                        'account/balances',
-                    ],
-                    'post': [
-                        'order/buy',
-                        'order/sell',
-                        'order/cancel',
-                        'account/orders',
-                        'account/balance',
-                    ],
+                "api": {
+                    "public": {
+                        "get": [
+                            "markets",
+                            "orders",
+                            "ticker",
+                            "history",
+                        ],
+                    },
+                    "private": {
+                        "get": [
+                            "account/order",
+                            "account/balances",
+                        ],
+                        "post": [
+                            "order/buy",
+                            "order/sell",
+                            "order/cancel",
+                            "account/orders",
+                            "account/balance",
+                        ],
+                    },
                 },
             },
-        })
+        )
 
     async def fetch_markets(self, params={}):
         response = await self.publicGetMarkets(params)
@@ -78,38 +80,38 @@ class tradeogre(Exchange):
             market = response[i]
             keys = list(market.keys())
             id = keys[0]
-            quoteId, baseId = id.split('-')
+            quoteId, baseId = id.split("-")
             base = self.common_currency_code(baseId)
             quote = self.common_currency_code(quoteId)
-            symbol = base + '/' + quote
+            symbol = base + "/" + quote
             entry = {
-                'id': id,
-                'symbol': symbol,
-                'base': base,
-                'quote': quote,
-                'baseId': baseId,
-                'quoteId': quoteId,
-                'active': True,
-                'precision': {
-                    'price': 8,
-                    'amount': None,
-                    'cost': None,
+                "id": id,
+                "symbol": symbol,
+                "base": base,
+                "quote": quote,
+                "baseId": baseId,
+                "quoteId": quoteId,
+                "active": True,
+                "precision": {
+                    "price": 8,
+                    "amount": None,
+                    "cost": None,
                 },
-                'limits': {
-                    'amount': {
-                        'min': None,
-                        'max': None,
+                "limits": {
+                    "amount": {
+                        "min": None,
+                        "max": None,
                     },
-                    'price': {
-                        'min': None,
-                        'max': None,
+                    "price": {
+                        "min": None,
+                        "max": None,
                     },
-                    'cost': {
-                        'min': None,
-                        'max': None,
+                    "cost": {
+                        "min": None,
+                        "max": None,
                     },
                 },
-                'info': market,
+                "info": market,
             }
             result.append(entry)
         return result
@@ -117,20 +119,20 @@ class tradeogre(Exchange):
     async def fetch_balance(self, params={}):
         await self.load_markets()
         response = await self.privateGetAccountBalances(params)
-        if not response['success'] and response['error'] == 'Must be authorized':
-            raise AuthenticationError('fetchBalance could not be authorized')
-        result = {'info': response}
-        balances = response['balances']
+        if not response["success"] and response["error"] == "Must be authorized":
+            raise AuthenticationError("fetchBalance could not be authorized")
+        result = {"info": response}
+        balances = response["balances"]
         currencies = list(balances.keys())
         for i in range(0, len(currencies)):
             currency = currencies[i]
             balance = balances[currency]
             if currency in self.currencies_by_id:
-                currency = self.currencies_by_id[currency]['code']
+                currency = self.currencies_by_id[currency]["code"]
             account = {
-                'free': None,
-                'used': None,
-                'total': balance,
+                "free": None,
+                "used": None,
+                "total": balance,
             }
             result[currency] = account
         return self.parse_balance(result)
@@ -138,46 +140,55 @@ class tradeogre(Exchange):
     async def fetch_ticker(self, symbol, params={}):
         await self.load_markets()
         market = self.market(symbol)
-        response = await self.publicGetTicker(self.extend({
-            'symbol': market['id'],
-        }, params))
-        response['symbol'] = symbol
+        response = await self.publicGetTicker(
+            self.extend(
+                {
+                    "symbol": market["id"],
+                },
+                params,
+            )
+        )
+        response["symbol"] = symbol
         return self.parse_ticker(response, market)
 
     def parse_ticker(self, ticker, market=None):
         return {
-            'symbol': ticker['symbol'],
-            'timestamp': None,
-            'datetime': None,
-            'high': self.safe_float(ticker, 'high'),
-            'low': self.safe_float(ticker, 'low'),
-            'bid': self.safe_float(ticker, 'bid'),
-            'bidVolume': None,
-            'ask': self.safe_float(ticker, 'ask'),
-            'askVolume': None,
-            'vwap': None,
-            'open': None,
-            'close': None,
-            'last': None,
-            'previousClose': self.safe_float(ticker, 'initialprice'),
-            'change': None,
-            'percentage': None,
-            'average': None,
-            'baseVolume': self.safe_float(ticker, 'volume'),
-            'quoteVolume': None,
-            'info': ticker,
+            "symbol": ticker["symbol"],
+            "timestamp": None,
+            "datetime": None,
+            "high": self.safe_float(ticker, "high"),
+            "low": self.safe_float(ticker, "low"),
+            "bid": self.safe_float(ticker, "bid"),
+            "bidVolume": None,
+            "ask": self.safe_float(ticker, "ask"),
+            "askVolume": None,
+            "vwap": None,
+            "open": None,
+            "close": None,
+            "last": None,
+            "previousClose": self.safe_float(ticker, "initialprice"),
+            "change": None,
+            "percentage": None,
+            "average": None,
+            "baseVolume": self.safe_float(ticker, "volume"),
+            "quoteVolume": None,
+            "info": ticker,
         }
 
     async def fetch_order_book(self, symbol, limit=None, params={}):
         await self.load_markets()
         market = self.market(symbol)
         request = {
-            'symbol': market['id'],
+            "symbol": market["id"],
         }
         response = await self.publicGetOrders(self.extend(request, params))
         # parseOrderBook in python won't you do parseBidsAsks on non-array bidasks, hence it must be done here
-        response['bids'] = self.parse_order_book_branch(self.safe_value(response, 'buy', {}))
-        response['asks'] = self.parse_order_book_branch(self.safe_value(response, 'sell', {}))
+        response["bids"] = self.parse_order_book_branch(
+            self.safe_value(response, "buy", {})
+        )
+        response["asks"] = self.parse_order_book_branch(
+            self.safe_value(response, "sell", {})
+        )
         return self.parse_order_book(response, symbol)
 
     def parse_order_book_branch(self, bidasks, priceKey=None, amountKey=None):
@@ -192,14 +203,18 @@ class tradeogre(Exchange):
             parsedData.append([price, amount])
         return parsedData
 
-    def sign(self, path, api='public', method='GET', params={}, headers=None, body=None):
-        url = self.urls['api'][api]
-        if api == 'private':
+    def sign(
+        self, path, api="public", method="GET", params={}, headers=None, body=None
+    ):
+        url = self.urls["api"][api]
+        if api == "private":
             self.check_required_credentials()
-            auth = self.encode(self.apiKey + ':' + self.secret)
+            auth = self.encode(self.apiKey + ":" + self.secret)
             auth = base64.b64encode(auth)
-            headers = {'Authorization': 'Basic ' + self.decode(auth)}
-        url += '/' + path
-        if (path == 'ticker' or path == 'orders' or path == 'history') and method == 'GET':
-            url += '/' + params['symbol']
-        return {'url': url, 'method': method, 'body': body, 'headers': headers}
+            headers = {"Authorization": "Basic " + self.decode(auth)}
+        url += "/" + path
+        if (
+            path == "ticker" or path == "orders" or path == "history"
+        ) and method == "GET":
+            url += "/" + params["symbol"]
+        return {"url": url, "method": method, "body": body, "headers": headers}

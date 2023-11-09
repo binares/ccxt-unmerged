@@ -11,7 +11,7 @@ out of service:
  - biki
  - bkex
  - ceo
- - coinbene !!
+ - coinbene [delist from uxs as well!!]
  - coinsuper
  - cossdex
  - dragonex

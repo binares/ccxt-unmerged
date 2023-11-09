@@ -16,132 +16,134 @@ from ccxt.base.errors import ExchangeNotAvailable
 
 
 class vitex(Exchange):
-
     def describe(self):
-        return self.deep_extend(super(vitex, self).describe(), {
-            'id': 'vitex',
-            'name': 'ViteX',
-            'countries': ['MT'],
-            'rateLimit': 500,
-            'certified': True,
-            # new metainfo interface
-            'has': {
-                # public api
-                'fetchMarkets': True,
-                'fetchTicker': True,
-                'fetchTickers': True,
-                'fetchOrderBook': True,
-                'fetchTrades': True,
-                'fetchOHLCV': True,
-                'fetchBidsAsks': True,
-                'fetchTime': True,
-                # private api
-                'fetchBalance': True,
-                'createOrder': True,
-                'cancelOrder': True,
-                'fetchOrder': True,
-                'fetchOrders': True,
-                'fetchMyTrades': False,
-                'fetchOpenOrders': True,
-                'fetchDeposits': True,
-                'fetchWithdrawals': True,
-            },
-            'timeframes': {
-                '1m': 'minute',
-                '30m': 'minute30',
-                '1h': 'hour',
-                '6h': 'hour6',
-                '12h': 'hour12',
-                '1d': 'day',
-                '1w': 'week',
-            },
-            'urls': {
-                'logo': 'https://growth-1257137467.cos.ap-chengdu.myqcloud.com/vitex.png',
-                'test': {
-                    'public': 'https://api.vitex.net/test/api/v2',
-                    'private': 'https://api.vitex.net/test/api/v2',
+        return self.deep_extend(
+            super(vitex, self).describe(),
+            {
+                "id": "vitex",
+                "name": "ViteX",
+                "countries": ["MT"],
+                "rateLimit": 500,
+                "certified": True,
+                # new metainfo interface
+                "has": {
+                    # public api
+                    "fetchMarkets": True,
+                    "fetchTicker": True,
+                    "fetchTickers": True,
+                    "fetchOrderBook": True,
+                    "fetchTrades": True,
+                    "fetchOHLCV": True,
+                    "fetchBidsAsks": True,
+                    "fetchTime": True,
+                    # private api
+                    "fetchBalance": True,
+                    "createOrder": True,
+                    "cancelOrder": True,
+                    "fetchOrder": True,
+                    "fetchOrders": True,
+                    "fetchMyTrades": False,
+                    "fetchOpenOrders": True,
+                    "fetchDeposits": True,
+                    "fetchWithdrawals": True,
                 },
-                'api': {
-                    'web': 'https://vitex.net/',
-                    'public': 'https://api.vitex.net/api/v2',
-                    'private': 'https://api.vitex.net/api/v2',
+                "timeframes": {
+                    "1m": "minute",
+                    "30m": "minute30",
+                    "1h": "hour",
+                    "6h": "hour6",
+                    "12h": "hour12",
+                    "1d": "day",
+                    "1w": "week",
                 },
-                'www': 'https://vitex.net/',
-                'doc': [
-                    'https://vite.wiki/dex/',
-                ],
-                'api_management': 'https://vite.wiki/dex/api/dex-apis.html',
-                'fees': 'https://vite.wiki/dex/#transaction-fee-model',
-            },
-            'api': {
-                'public': {
-                    'get': [
-                        'ping',
-                        'time',
-                        'depth',
-                        'trades',
-                        'trades/all',
-                        'klines',
-                        'markets',
-                        'ticker/24hr',
-                        'ticker/price',
-                        'ticker/bookTicker',
-                        'balance',
-                        'order',
-                        'orders',
-                        'orders/open',
-                        'deposit-withdraw',
+                "urls": {
+                    "logo": "https://growth-1257137467.cos.ap-chengdu.myqcloud.com/vitex.png",
+                    "test": {
+                        "public": "https://api.vitex.net/test/api/v2",
+                        "private": "https://api.vitex.net/test/api/v2",
+                    },
+                    "api": {
+                        "web": "https://vitex.net/",
+                        "public": "https://api.vitex.net/api/v2",
+                        "private": "https://api.vitex.net/api/v2",
+                    },
+                    "www": "https://vitex.net/",
+                    "doc": [
+                        "https://vite.wiki/dex/",
                     ],
+                    "api_management": "https://vite.wiki/dex/api/dex-apis.html",
+                    "fees": "https://vite.wiki/dex/#transaction-fee-model",
                 },
-                'private': {
-                    'post': [
-                        'order',
-                        'order/test',
-                    ],
-                    'delete': [
-                        'order',
-                        'allOpenOrders',
-                    ],
+                "api": {
+                    "public": {
+                        "get": [
+                            "ping",
+                            "time",
+                            "depth",
+                            "trades",
+                            "trades/all",
+                            "klines",
+                            "markets",
+                            "ticker/24hr",
+                            "ticker/price",
+                            "ticker/bookTicker",
+                            "balance",
+                            "order",
+                            "orders",
+                            "orders/open",
+                            "deposit-withdraw",
+                        ],
+                    },
+                    "private": {
+                        "post": [
+                            "order",
+                            "order/test",
+                        ],
+                        "delete": [
+                            "order",
+                            "allOpenOrders",
+                        ],
+                    },
+                },
+                "requiredCredentials": {
+                    "walletAddress": True,
+                    "privateKey": False,
+                    "apiKey": True,
+                    "secret": True,
+                },
+                # exchange-specific options
+                "options": {
+                    "fetchTradesMethod": "publicGetAggTrades",  # publicGetTrades, publicGetHistoricalTrades
+                    "fetchTickersMethod": "publicGetTicker24hr",
+                    "defaultTimeInForce": "GTC",  # 'GTC' = Good To Cancel(only)
+                    "defaultLimitOrderType": "limit",  # or 'limit_maker'
+                    "hasAlreadyAuthenticatedSuccessfully": False,
+                    "warnOnFetchOpenOrdersWithoutSymbol": True,
+                    "recvWindow": 5 * 1000,  # 2 sec, vitex default
+                    "timeDifference": 0,  # the difference between system clock and Binance clock
+                    "adjustForTimeDifference": False,  # controls the adjustment logic upon instantiation
+                    "parseOrderToPrecision": False,  # force amounts and costs in parseOrder to precision
+                    "newOrderRespType": {
+                        "market": "FULL",  # 'ACK' for order id, 'RESULT' for full order or 'FULL' for order with fills
+                        "limit": "RESULT",  # we change it from 'ACK' by default to 'RESULT'
+                    },
+                },
+                "exceptions": {
+                    "1002": AuthenticationError,
+                    "1006": InvalidOrder,
+                    "Account has insufficient balance for requested action.": InsufficientFunds,
+                    "Rest API trading is not enabled.": ExchangeNotAvailable,
+                    "You don't have permission.": PermissionDenied,  # {"msg":"You don't have permission.","success":false}
+                    "Market is closed.": ExchangeNotAvailable,  # {"code":-1013,"msg":"Market is closed."}
+                    "1": ExchangeNotAvailable,  # {"code":-1000,"msg":"An unknown error occured while processing the request."}
+                    "1001": RateLimitExceeded,  # {"code":-1003,"msg":"Too much request weight used, current limit is 1200 request weight per 1 MINUTE. Please use the websocket for live updates to avoid polling the API."}
+                    "1007": InvalidOrder,  # createOrder -> 'invalid quantity'/'invalid price'/MIN_NOTIONAL
                 },
             },
-            'requiredCredentials': {
-                'walletAddress': True,
-                'privateKey': False,
-                'apiKey': True,
-                'secret': True,
-            },
-            # exchange-specific options
-            'options': {
-                'fetchTradesMethod': 'publicGetAggTrades',  # publicGetTrades, publicGetHistoricalTrades
-                'fetchTickersMethod': 'publicGetTicker24hr',
-                'defaultTimeInForce': 'GTC',  # 'GTC' = Good To Cancel(only)
-                'defaultLimitOrderType': 'limit',  # or 'limit_maker'
-                'hasAlreadyAuthenticatedSuccessfully': False,
-                'warnOnFetchOpenOrdersWithoutSymbol': True,
-                'recvWindow': 5 * 1000,  # 2 sec, vitex default
-                'timeDifference': 0,  # the difference between system clock and Binance clock
-                'adjustForTimeDifference': False,  # controls the adjustment logic upon instantiation
-                'parseOrderToPrecision': False,  # force amounts and costs in parseOrder to precision
-                'newOrderRespType': {
-                    'market': 'FULL',  # 'ACK' for order id, 'RESULT' for full order or 'FULL' for order with fills
-                    'limit': 'RESULT',  # we change it from 'ACK' by default to 'RESULT'
-                },
-            },
-            'exceptions': {
-                '1002': AuthenticationError,
-                '1006': InvalidOrder,
-                'Account has insufficient balance for requested action.': InsufficientFunds,
-                'Rest API trading is not enabled.': ExchangeNotAvailable,
-                "You don't have permission.": PermissionDenied,  # {"msg":"You don't have permission.","success":false}
-                'Market is closed.': ExchangeNotAvailable,  # {"code":-1013,"msg":"Market is closed."}
-                '1': ExchangeNotAvailable,  # {"code":-1000,"msg":"An unknown error occured while processing the request."}
-                '1001': RateLimitExceeded,  # {"code":-1003,"msg":"Too much request weight used, current limit is 1200 request weight per 1 MINUTE. Please use the websocket for live updates to avoid polling the API."}
-                '1007': InvalidOrder,  # createOrder -> 'invalid quantity'/'invalid price'/MIN_NOTIONAL
-            },
-        })
+        )
 
     def nonce(self):
-        return self.milliseconds() - self.options['timeDifference']
+        return self.milliseconds() - self.options["timeDifference"]
 
     async def fetch_markets(self, params={}):
         # {
@@ -160,64 +162,66 @@ class vitex(Exchange):
         #     ]
         #   }
         response = await self.publicGetMarkets()
-        markets = self.safe_value(response, 'data')
+        markets = self.safe_value(response, "data")
         result = []
         limits = {
-            'amount': {
-                'min': None,
-                'max': None,
+            "amount": {
+                "min": None,
+                "max": None,
             },
-            'price': {
-                'min': None,
-                'max': None,
+            "price": {
+                "min": None,
+                "max": None,
             },
-            'cost': {
-                'min': None,
-                'max': None,
+            "cost": {
+                "min": None,
+                "max": None,
             },
         }
         for i in range(0, len(markets)):
             market = markets[i]
-            id = self.safe_string(market, 'symbol')
-            baseId = self.format_symbol_token(market['tradeTokenSymbol'])
-            quoteId = self.format_symbol_token(market['quoteTokenSymbol'])
+            id = self.safe_string(market, "symbol")
+            baseId = self.format_symbol_token(market["tradeTokenSymbol"])
+            quoteId = self.format_symbol_token(market["quoteTokenSymbol"])
             base = self.safe_currency_code(baseId)
             quote = self.safe_currency_code(quoteId)
-            symbol = base + '/' + quote
+            symbol = base + "/" + quote
             precision = {
-                'base': market['quantityPrecision'],
-                'quote': market['pricePrecision'],
-                'price': market['pricePrecision'],
-                'amount': market['quantityPrecision'],
+                "base": market["quantityPrecision"],
+                "quote": market["pricePrecision"],
+                "price": market["pricePrecision"],
+                "amount": market["quantityPrecision"],
             }
-            result.append({
-                'symbol': symbol,
-                'precision': precision,
-                'base': base,
-                'quote': quote,
-                'baseId': baseId,
-                'quoteId': quoteId,
-                'limits': limits,
-                'id': id,
-                'info': market,
-                'active': True,
-            })
+            result.append(
+                {
+                    "symbol": symbol,
+                    "precision": precision,
+                    "base": base,
+                    "quote": quote,
+                    "baseId": baseId,
+                    "quoteId": quoteId,
+                    "limits": limits,
+                    "id": id,
+                    "info": market,
+                    "active": True,
+                }
+            )
         return result
 
     async def fetch_ticker(self, symbol, params={}):
         await self.load_markets()
         market = self.market(symbol)
         request = {
-            'symbols': market['id'],
+            "symbols": market["id"],
         }
-        query = self.omit(request, 'symbols')
+        query = self.omit(request, "symbols")
         response = await self.publicGetTicker24hr(self.extend(query, params))
-        data = self.safe_value(response, 'data')
+        data = self.safe_value(response, "data")
         dataLength = len(data)
         if dataLength:
             return self.parse_ticker(data[0], market)
         else:
-            raise ExchangeError(self.id + ' fetch ticker failed ' + self.json(response))
+            raise ExchangeError(self.id + " fetch ticker failed " + self.json(response))
 
     async def fetch_tickers(self, symbols=None, params={}):
         await self.load_markets()
@@ -225,21 +229,21 @@ class vitex(Exchange):
         if symbols is not None:
             for i in range(0, len(symbols)):
                 market = self.market(symbols[i])
-                symbol = market['id']
+                symbol = market["id"]
                 tm.append(symbol)
         request = {
-            'symbols': ','.join(tm),
+            "symbols": ",".join(tm),
         }
-        query = self.omit(request, 'symbols')
+        query = self.omit(request, "symbols")
         response = await self.publicGetTicker24hr(self.extend(query, params))
-        data = self.safe_value(response, 'data')
+        data = self.safe_value(response, "data")
         return self.parse_tickers(data, symbols)
 
     def parse_tickers(self, rawTickers, symbols=None):
         tickers = []
         for i in range(0, len(rawTickers)):
             tickers.append(self.parse_ticker(rawTickers[i]))
-        return self.filter_by_array(tickers, 'symbol', symbols)
+        return self.filter_by_array(tickers, "symbol", symbols)
 
     def parse_ticker(self, ticker, market=None):
         # {
@@ -263,33 +267,35 @@ class vitex(Exchange):
         #     "closeTime": null
         # }
         symbol = None
-        marketId = self.safe_string(ticker, 'symbol')
+        marketId = self.safe_string(ticker, "symbol")
         if marketId in self.markets_by_id:
             market = self.markets_by_id[marketId]
         if market:
-            symbol = market['symbol']
-        last = self.safe_float(ticker, 'closePrice')
+            symbol = market["symbol"]
+        last = self.safe_float(ticker, "closePrice")
         return {
-            'symbol': symbol,
-            'timestamp': None,
-            'datetime': None,
-            'high': self.safe_float(ticker, 'highPrice'),
-            'low': self.safe_float(ticker, 'lowPrice'),
-            'bid': self.safe_float(ticker, 'bidPrice'),
-            'bidVolume': self.safe_float(ticker, 'bidQuantity'),
-            'ask': self.safe_float(ticker, 'askPrice'),
-            'askVolume': self.safe_float(ticker, 'askQuantity'),
-            'vwap': None,
-            'open': self.safe_float(ticker, 'openPrice'),
-            'close': last,
-            'last': last,
-            'previousClose': self.safe_float(ticker, 'prevClosePrice'),  # previous day close
-            'change': self.safe_float(ticker, 'priceChange'),
-            'percentage': self.safe_float(ticker, 'priceChangePercent'),
-            'average': None,
-            'baseVolume': self.safe_float(ticker, 'quantity'),
-            'quoteVolume': self.safe_float(ticker, 'amount'),
-            'info': ticker,
+            "symbol": symbol,
+            "timestamp": None,
+            "datetime": None,
+            "high": self.safe_float(ticker, "highPrice"),
+            "low": self.safe_float(ticker, "lowPrice"),
+            "bid": self.safe_float(ticker, "bidPrice"),
+            "bidVolume": self.safe_float(ticker, "bidQuantity"),
+            "ask": self.safe_float(ticker, "askPrice"),
+            "askVolume": self.safe_float(ticker, "askQuantity"),
+            "vwap": None,
+            "open": self.safe_float(ticker, "openPrice"),
+            "close": last,
+            "last": last,
+            "previousClose": self.safe_float(
+                ticker, "prevClosePrice"
+            ),  # previous day close
+            "change": self.safe_float(ticker, "priceChange"),
+            "percentage": self.safe_float(ticker, "priceChangePercent"),
+            "average": None,
+            "baseVolume": self.safe_float(ticker, "quantity"),
+            "quoteVolume": self.safe_float(ticker, "amount"),
+            "info": ticker,
         }
 
     async def fetch_order_book(self, symbol, limit=None, params={}):
@@ -323,25 +329,25 @@ class vitex(Exchange):
         await self.load_markets()
         market = self.market(symbol)
         request = {
-            'symbol': market['id'],
+            "symbol": market["id"],
         }
         if limit is not None:
-            request['limit'] = limit  # default 100
+            request["limit"] = limit  # default 100
         response = await self.publicGetDepth(self.extend(request, params))
-        depth = self.safe_value(response, 'data')
+        depth = self.safe_value(response, "data")
         orderbook = self.parse_order_book(depth, symbol)
-        orderbook['nonce'] = self.safe_integer(depth, 'timestamp')
+        orderbook["nonce"] = self.safe_integer(depth, "timestamp")
         return orderbook
 
     async def fetch_trades(self, symbol, since=None, limit=None, params={}):
         await self.load_markets()
         market = self.market(symbol)
         request = {
-            'symbol': market['id'],
+            "symbol": market["id"],
         }
         if limit is not None:
-            request['limit'] = limit  # default = 500, maximum = 1000
-        params['symbol'] = market['id']
+            request["limit"] = limit  # default = 500, maximum = 1000
+        params["symbol"] = market["id"]
         response = await self.publicGetTradesAll(self.extend(request, params))
         # {
         #     "code": 0,
@@ -369,53 +375,55 @@ class vitex(Exchange):
         #       "total": -1
         #     }
         #   }
-        data = self.safe_value(response, 'data')
-        trade = self.safe_value(data, 'trade')
+        data = self.safe_value(response, "data")
+        trade = self.safe_value(data, "trade")
         return self.parse_trades(trade, market, since, limit)
 
     def parse_trade(self, trade, market):
-        timestamp = self.safe_timestamp(trade, 'time')
-        price = self.safe_float(trade, 'price')
-        cost = self.safe_float(trade, 'amount')
-        sideTmp = self.safe_integer(trade, 'side')
-        id = self.safe_string(trade, 'tradeId')
+        timestamp = self.safe_timestamp(trade, "time")
+        price = self.safe_float(trade, "price")
+        cost = self.safe_float(trade, "amount")
+        sideTmp = self.safe_integer(trade, "side")
+        id = self.safe_string(trade, "tradeId")
         side = None
         if sideTmp == 1:
-            side = 'sell'
+            side = "sell"
         elif sideTmp == 0:
-            side = 'buy'
-        buyFee = self.safe_float(trade, 'buyFee')
-        sellFee = self.safe_float(trade, 'sellFee')
-        amount = self.safe_float(trade, 'quantity')
-        quoteTokenSymbol = self.safe_string(trade, 'quoteTokenSymbol')
+            side = "buy"
+        buyFee = self.safe_float(trade, "buyFee")
+        sellFee = self.safe_float(trade, "sellFee")
+        amount = self.safe_float(trade, "quantity")
+        quoteTokenSymbol = self.safe_string(trade, "quoteTokenSymbol")
         fee = {
-            'cost': None,
-            'currency': self.format_symbol_token(quoteTokenSymbol),
+            "cost": None,
+            "currency": self.format_symbol_token(quoteTokenSymbol),
         }
-        if side == 'buy':
-            fee['cost'] = buyFee
-        elif side == 'sell':
-            fee['cost'] = sellFee
+        if side == "buy":
+            fee["cost"] = buyFee
+        elif side == "sell":
+            fee["cost"] = sellFee
         symbol = None
         if market is not None:
-            symbol = market['symbol']
+            symbol = market["symbol"]
         return {
-            'info': trade,
-            'timestamp': timestamp,
-            'datetime': self.iso8601(timestamp),
-            'symbol': symbol,
-            'id': id,
-            'order': id,
-            'type': None,
-            'takerOrMaker': None,
-            'side': side,
-            'price': price,
-            'amount': amount,
-            'cost': cost,
-            'fee': fee,
+            "info": trade,
+            "timestamp": timestamp,
+            "datetime": self.iso8601(timestamp),
+            "symbol": symbol,
+            "id": id,
+            "order": id,
+            "type": None,
+            "takerOrMaker": None,
+            "side": side,
+            "price": price,
+            "amount": amount,
+            "cost": cost,
+            "fee": fee,
         }
 
-    async def fetch_ohlcv(self, symbol, timeframe='1m', since=None, limit=None, params={}):
+    async def fetch_ohlcv(
+        self, symbol, timeframe="1m", since=None, limit=None, params={}
+    ):
         # {
         #     "code": 0,
         #     "msg": "ok",
@@ -443,24 +451,31 @@ class vitex(Exchange):
         await self.load_markets()
         market = self.market(symbol)
         request = {
-            'symbol': market['id'],
-            'interval': self.timeframes[timeframe],
+            "symbol": market["id"],
+            "interval": self.timeframes[timeframe],
         }
         if since is not None:
-            request['startTime'] = int(since / 1000)
+            request["startTime"] = int(since / 1000)
         if limit is not None:
-            request['limit'] = limit  # default == max == 500
+            request["limit"] = limit  # default == max == 500
         response = await self.publicGetKlines(self.extend(request, params))
-        data = self.safe_value(response, 'data')
+        data = self.safe_value(response, "data")
         result = []
-        tArr = self.safe_value(data, 't')
-        oArr = self.safe_value(data, 'p')
-        hArr = self.safe_value(data, 'h')
-        lArr = self.safe_value(data, 'l')
-        cArr = self.safe_value(data, 'c')
-        vArr = self.safe_value(data, 'v')
+        tArr = self.safe_value(data, "t")
+        oArr = self.safe_value(data, "p")
+        hArr = self.safe_value(data, "h")
+        lArr = self.safe_value(data, "l")
+        cArr = self.safe_value(data, "c")
+        vArr = self.safe_value(data, "v")
         for i in range(0, len(tArr)):
-            temp = [self.safe_timestamp(tArr, i), oArr[i], hArr[i], lArr[i], cArr[i], vArr[i]]
+            temp = [
+                self.safe_timestamp(tArr, i),
+                oArr[i],
+                hArr[i],
+                lArr[i],
+                cArr[i],
+                vArr[i],
+            ]
             result.append(temp)
         return self.parse_ohlcvs(result, market, timeframe, since, limit)
 
@@ -506,29 +521,29 @@ class vitex(Exchange):
         await self.load_markets()
         market = self.market(symbol)
         request = {
-            'symbol': market['id'],
+            "symbol": market["id"],
         }
         response = await self.publicGetTickerBookTicker(self.extend(request, params))
-        data = self.safe_value(response, 'data')
+        data = self.safe_value(response, "data")
         return self.parse_ticker(data, market)
 
     async def fetch_time(self, params={}):
         response = await self.publicGetTime(params)
-        return self.safe_integer(response, 'data')
+        return self.safe_integer(response, "data")
 
     async def load_time_difference(self):
         serverTime = await self.fetch_time()
         after = self.milliseconds()
-        self.options['timeDifference'] = after - serverTime
-        return self.options['timeDifference']
+        self.options["timeDifference"] = after - serverTime
+        return self.options["timeDifference"]
 
     def format_symbol_token(self, symbolToken):
-        token = symbolToken.split('-')[0]
+        token = symbolToken.split("-")[0]
         return token
 
     async def fetch_balance(self, params={}):
         request = {
-            'address': self.walletAddress,
+            "address": self.walletAddress,
         }
         response = await self.publicGetBalance(self.extend(request, params))
         # "code": 0,
@@ -556,30 +571,30 @@ class vitex(Exchange):
         # }
         # }
         result = {
-            'info': response,
+            "info": response,
         }
-        balances = self.safe_value(response, 'data')
+        balances = self.safe_value(response, "data")
         keys = list(balances.keys())
         for i in range(0, len(keys)):
             currency = keys[i]
             balance = balances[currency]
             code = self.format_symbol_token(self.safe_currency_code(currency))
             result[code] = {
-                'free': self.safe_float(balance, 'available'),
-                'used': self.safe_float(balance, 'locked'),
+                "free": self.safe_float(balance, "available"),
+                "used": self.safe_float(balance, "locked"),
             }
         return self.parse_balance(result)
 
     def parse_order_status(self, status):
         statuses = {
-            '3': 'open',
-            '5': 'open',
-            '4': 'closed',
-            '7': 'canceled',
-            '8': 'canceled',
-            '6': 'canceling',
-            '9': 'failed',
-            '10': 'canceled',
+            "3": "open",
+            "5": "open",
+            "4": "closed",
+            "7": "canceled",
+            "8": "canceled",
+            "6": "canceling",
+            "9": "failed",
+            "10": "canceled",
         }
         return self.safe_string(statuses, status, status)
 
@@ -609,71 +624,71 @@ class vitex(Exchange):
         #       "createTime": 1586941713
         #     }
         #   }
-        status = self.parse_order_status(self.safe_string(order, 'status'))
+        status = self.parse_order_status(self.safe_string(order, "status"))
         symbol = None
-        marketId = self.safe_string(order, 'symbol')
+        marketId = self.safe_string(order, "symbol")
         if marketId in self.markets_by_id:
             market = self.markets_by_id[marketId]
         if market is not None:
-            symbol = market['symbol']
-        timestamp = self.safe_timestamp(order, 'createTime')
-        price = self.safe_float(order, 'price')
-        amount = self.safe_float(order, 'quantity')
-        filled = self.safe_float(order, 'executedQuantity')
-        quoteTokenSymbol = self.safe_string(order, 'quoteTokenSymbol')
+            symbol = market["symbol"]
+        timestamp = self.safe_timestamp(order, "createTime")
+        price = self.safe_float(order, "price")
+        amount = self.safe_float(order, "quantity")
+        filled = self.safe_float(order, "executedQuantity")
+        quoteTokenSymbol = self.safe_string(order, "quoteTokenSymbol")
         remaining = None
-        cost = self.safe_float(order, 'amount')
+        cost = self.safe_float(order, "amount")
         if filled is not None:
             if amount is not None:
                 remaining = amount - filled
                 remaining = max(remaining, 0.0)
-        id = self.safe_string(order, 'orderId')
-        type = 'limit'
-        sideTmp = self.safe_integer(order, 'side')
-        side = sideTmp == 'sell' if 1 else 'buy'
+        id = self.safe_string(order, "orderId")
+        type = "limit"
+        sideTmp = self.safe_integer(order, "side")
+        side = sideTmp == "sell" if 1 else "buy"
         fee = {
-            'cost': self.safe_float(order, 'fee'),
-            'currency': self.format_symbol_token(quoteTokenSymbol),
+            "cost": self.safe_float(order, "fee"),
+            "currency": self.format_symbol_token(quoteTokenSymbol),
         }
         return {
-            'info': order,
-            'id': id,
-            'clientOrderId': None,
-            'timestamp': timestamp,
-            'datetime': self.iso8601(timestamp),
-            'lastTradeTimestamp': None,
-            'symbol': symbol,
-            'type': type,
-            'side': side,
-            'price': price,
-            'amount': amount,
-            'cost': cost,
-            'average': None,
-            'filled': filled,
-            'remaining': remaining,
-            'status': status,
-            'fee': fee,
-            'trades': None,
+            "info": order,
+            "id": id,
+            "clientOrderId": None,
+            "timestamp": timestamp,
+            "datetime": self.iso8601(timestamp),
+            "lastTradeTimestamp": None,
+            "symbol": symbol,
+            "type": type,
+            "side": side,
+            "price": price,
+            "amount": amount,
+            "cost": cost,
+            "average": None,
+            "filled": filled,
+            "remaining": remaining,
+            "status": status,
+            "fee": fee,
+            "trades": None,
         }
 
     def parse_order_side(self, side):
         sides = {
-            'buy': 0,
-            'sell': 1,
+            "buy": 0,
+            "sell": 1,
         }
         return self.safe_integer(sides, side, side)
 
     def parse_create_order(self, order, market=None):
         symbol = None
-        marketId = self.safe_string(order, 'symbol')
+        marketId = self.safe_string(order, "symbol")
         if marketId in self.markets_by_id:
             market = self.markets_by_id[marketId]
         if market is not None:
-            symbol = market['symbol']
+            symbol = market["symbol"]
         return {
-            'info': order,
-            'symbol': symbol,
-            'orderId': self.safe_value(order, 'orderId'),
+            "info": order,
+            "symbol": symbol,
+            "orderId": self.safe_value(order, "orderId"),
         }
 
     async def create_order(self, symbol, type, side, amount, price=None, params={}):
@@ -689,68 +704,72 @@ class vitex(Exchange):
         await self.load_markets()
         market = self.market(symbol)
         # the next 5 lines are added to support for testing orders
-        method = 'privatePostOrder'
-        test = self.safe_value(params, 'test', False)
+        method = "privatePostOrder"
+        test = self.safe_value(params, "test", False)
         if test:
-            method += 'Test'
-            params = self.omit(params, 'test')
+            method += "Test"
+            params = self.omit(params, "test")
         request = {
-            'symbol': market['id'],
-            'price': price,
-            'amount': amount,
-            'side': self.parse_order_side(side),
+            "symbol": market["id"],
+            "price": price,
+            "amount": amount,
+            "side": self.parse_order_side(side),
         }
         response = await getattr(self, method)(self.extend(request, params))
-        data = self.safe_value(response, 'data')
+        data = self.safe_value(response, "data")
         return self.parse_create_order(data, market)
 
     async def fetch_order(self, id, symbol=None, params={}):
         await self.load_markets()
         if id is None:
-            raise ArgumentsRequired(self.id + ' fetchOrders requires a orderId argument')
+            raise ArgumentsRequired(
+                self.id + " fetchOrders requires a orderId argument"
+            )
         request = {
-            'address': self.walletAddress,
-            'orderId': id,
+            "address": self.walletAddress,
+            "orderId": id,
         }
         response = await self.publicGetOrder(self.extend(request, params))
-        data = self.safe_value(response, 'data')
+        data = self.safe_value(response, "data")
         return self.parse_order(data, None)
 
     async def fetch_orders(self, symbol=None, since=None, limit=None, params={}):
         if symbol is None:
-            raise ArgumentsRequired(self.id + ' fetchOrders requires a symbol argument')
+            raise ArgumentsRequired(self.id + " fetchOrders requires a symbol argument")
         await self.load_markets()
         market = self.market(symbol)
         request = {
-            'symbol': market['id'],
-            'address': self.walletAddress,
+            "symbol": market["id"],
+            "address": self.walletAddress,
         }
         if since is not None:
-            request['startTime'] = since
+            request["startTime"] = since
         if limit is not None:
-            request['limit'] = limit
+            request["limit"] = limit
         response = await self.publicGetOrders(self.extend(request, params))
-        data = self.safe_value(response, 'data')
-        orders = self.safe_value(data, 'order')
+        data = self.safe_value(response, "data")
+        orders = self.safe_value(data, "order")
         return self.parse_orders(orders, market, since, limit)
 
     async def fetch_open_orders(self, symbol=None, since=None, limit=None, params={}):
         await self.load_markets()
         if symbol is None:
-            raise ArgumentsRequired(self.id + ' fetchOpenOrders requires a symbol argument')
+            raise ArgumentsRequired(
+                self.id + " fetchOpenOrders requires a symbol argument"
+            )
         market = None
         request = {}
         market = self.market(symbol)
-        request['symbol'] = market['id']
-        request['address'] = self.walletAddress
+        request["symbol"] = market["id"]
+        request["address"] = self.walletAddress
         response = await self.publicGetOrdersOpen(self.extend(request, params))
-        data = self.safe_value(response, 'data')
-        orders = self.safe_value(data, 'order')
+        data = self.safe_value(response, "data")
+        orders = self.safe_value(data, "order")
         return self.parse_orders(orders, market, since, limit)
 
     async def fetch_closed_orders(self, symbol=None, since=None, limit=None, params={}):
         orders = await self.fetch_orders(symbol, since, limit, params)
-        return self.filter_by(orders, 'status', 'closed')
+        return self.filter_by(orders, "status", "closed")
 
     async def cancel_order(self, id, symbol=None, params={}):
         # {
@@ -764,27 +783,31 @@ class vitex(Exchange):
         #     }
         #   }
         if symbol is None:
-            raise ArgumentsRequired(self.id + ' cancelOrder requires a symbol argument')
+            raise ArgumentsRequired(self.id + " cancelOrder requires a symbol argument")
         if id is None:
-            raise ArgumentsRequired(self.id + ' cancelOrder requires a orderId argument')
+            raise ArgumentsRequired(
+                self.id + " cancelOrder requires a orderId argument"
+            )
         await self.load_markets()
         market = self.market(symbol)
         request = {
-            'symbol': market['id'],
-            'orderId': id,
+            "symbol": market["id"],
+            "orderId": id,
         }
-        method = 'privateDeleteOrder'
+        method = "privateDeleteOrder"
         response = await getattr(self, method)(self.extend(request, params))
-        data = self.safe_value(response, 'data')
+        data = self.safe_value(response, "data")
         return self.parse_create_order(data)
 
     async def fetch_deposits(self, code=None, since=None, limit=None, params={}):
-        tokenId = self.safe_string(params, 'tokenId')
+        tokenId = self.safe_string(params, "tokenId")
         request = {
-            'address': self.walletAddress,
+            "address": self.walletAddress,
         }
         if tokenId is None:
-            raise ArgumentsRequired(self.id + ' cancelOrder requires a tokenId in params')
+            raise ArgumentsRequired(
+                self.id + " cancelOrder requires a tokenId in params"
+            )
         currency = None
         if code is not None:
             currency = self.currency(code)
@@ -801,21 +824,23 @@ class vitex(Exchange):
         #     ],
         #     "total": 16
         #   }
-        data = self.safe_value(response, 'data')
-        records = self.safe_value(data, 'record')
+        data = self.safe_value(response, "data")
+        records = self.safe_value(data, "record")
         transactions = []
         for i in range(0, len(records)):
-            if records[i]['type'] == 1:
-                transactions.append(records['i'])
+            if records[i]["type"] == 1:
+                transactions.append(records["i"])
         return self.parse_transactions(transactions, currency, since, limit)
 
     async def fetch_withdrawals(self, code=None, since=None, limit=None, params={}):
-        tokenId = self.safe_string(params, 'tokenId')
+        tokenId = self.safe_string(params, "tokenId")
         request = {
-            'address': self.walletAddress,
+            "address": self.walletAddress,
         }
         if tokenId is None:
-            raise ArgumentsRequired(self.id + ' cancelOrder requires a tokenId in params')
+            raise ArgumentsRequired(
+                self.id + " cancelOrder requires a tokenId in params"
+            )
         currency = None
         if code is not None:
             currency = self.currency(code)
@@ -832,30 +857,30 @@ class vitex(Exchange):
         #     ],
         #     "total": 16
         #   }
-        data = self.safe_value(response, 'data')
-        records = self.safe_value(data, 'record')
+        data = self.safe_value(response, "data")
+        records = self.safe_value(data, "record")
         transactions = []
         for i in range(0, len(records)):
-            if records[i]['type'] == 2:
-                transactions.append(records['i'])
+            if records[i]["type"] == 2:
+                transactions.append(records["i"])
         return self.parse_transactions(transactions, currency, since, limit)
 
     def parse_transaction_status_by_type(self, status, type=None):
         if type is None:
             return status
         statuses = {
-            'deposit': {
-                '0': 'pending',
-                '1': 'ok',
+            "deposit": {
+                "0": "pending",
+                "1": "ok",
             },
-            'withdrawal': {
-                '0': 'pending',  # Email Sent
-                '1': 'canceled',  # Cancelled(different from 1 = ok in deposits)
-                '2': 'pending',  # Awaiting Approval
-                '3': 'failed',  # Rejected
-                '4': 'pending',  # Processing
-                '5': 'failed',  # Failure
-                '6': 'ok',  # Completed
+            "withdrawal": {
+                "0": "pending",  # Email Sent
+                "1": "canceled",  # Cancelled(different from 1 = ok in deposits)
+                "2": "pending",  # Awaiting Approval
+                "3": "failed",  # Rejected
+                "4": "pending",  # Processing
+                "5": "failed",  # Failure
+                "6": "ok",  # Completed
             },
         }
         return statuses[type][status] if (status in statuses[type]) else status
@@ -872,89 +897,129 @@ class vitex(Exchange):
         #     ],
         #     "total": 16
         #   }
-        currencyId = self.format_symbol_token(self.safe_string(transaction, 'tokenSymbol'))
+        currencyId = self.format_symbol_token(
+            self.safe_string(transaction, "tokenSymbol")
+        )
         code = self.safe_currency_code(currencyId, currency)
-        timestamp = self.safe_timestamp(transaction, 'time')
-        tmType = self.safe_integer(transaction, 'type')
-        type = tmType == 'deposit' if 1 else 'withdrawal'
-        status = 'ok'
-        amount = self.safe_float(transaction, 'amount')
+        timestamp = self.safe_timestamp(transaction, "time")
+        tmType = self.safe_integer(transaction, "type")
+        type = tmType == "deposit" if 1 else "withdrawal"
+        status = "ok"
+        amount = self.safe_float(transaction, "amount")
         return {
-            'info': transaction,
-            'id': None,
-            'txid': None,
-            'timestamp': timestamp,
-            'datetime': self.iso8601(timestamp),
-            'address': self.walletAddress,
-            'tag': None,
-            'type': type,
-            'amount': amount,
-            'currency': code,
-            'status': status,
-            'updated': None,
-            'fee': None,
+            "info": transaction,
+            "id": None,
+            "txid": None,
+            "timestamp": timestamp,
+            "datetime": self.iso8601(timestamp),
+            "address": self.walletAddress,
+            "tag": None,
+            "type": type,
+            "amount": amount,
+            "currency": code,
+            "status": status,
+            "updated": None,
+            "fee": None,
         }
 
-    def sign(self, path, api='public', method='GET', params={}, headers=None, body=None):
-        url = self.urls['api'][api]
-        url += '/' + path
-        if (api == 'private'):
+    def sign(
+        self, path, api="public", method="GET", params={}, headers=None, body=None
+    ):
+        url = self.urls["api"][api]
+        url += "/" + path
+        if api == "private":
             self.check_required_credentials()
-            query = self.urlencode_with_array_repeat(self.keysort(self.extend({
-                'timestamp': self.nonce(),
-                'key': self.apiKey,
-            }, params)))
+            query = self.urlencode_with_array_repeat(
+                self.keysort(
+                    self.extend(
+                        {
+                            "timestamp": self.nonce(),
+                            "key": self.apiKey,
+                        },
+                        params,
+                    )
+                )
+            )
             signature = self.hmac(self.encode(query), self.encode(self.secret))
-            query += '&' + 'signature=' + signature
-            if (method == 'GET') or (method == 'DELETE'):
-                url += '?' + query
+            query += "&" + "signature=" + signature
+            if (method == "GET") or (method == "DELETE"):
+                url += "?" + query
             else:
                 body = query
                 headers = {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    "Content-Type": "application/x-www-form-urlencoded",
                 }
         else:
             query = self.urlencode_with_array_repeat(params)
-            if (method == 'GET') or (method == 'DELETE'):
-                url += '?' + query
+            if (method == "GET") or (method == "DELETE"):
+                url += "?" + query
             else:
                 body = query
-        return {'url': url, 'method': method, 'body': body, 'headers': headers}
+        return {"url": url, "method": method, "body": body, "headers": headers}
 
-    def handle_errors(self, code, reason, url, method, headers, body, response, requestHeaders, requestBody):
+    def handle_errors(
+        self,
+        code,
+        reason,
+        url,
+        method,
+        headers,
+        body,
+        response,
+        requestHeaders,
+        requestBody,
+    ):
         if (code == 418) or (code == 429):
-            raise DDoSProtection(self.id + ' ' + str(code) + ' ' + reason + ' ' + body)
+            raise DDoSProtection(self.id + " " + str(code) + " " + reason + " " + body)
         # error response in a form: {"code": -1013, "msg": "Invalid quantity."}
         # following block cointains legacy checks against message patterns in "msg" property
         # will switch "code" checks eventually, when we know all of them
         if code >= 400:
-            if body.find('Price * QTY is zero or less') >= 0:
-                raise InvalidOrder(self.id + ' order cost = amount * price is zero or less ' + body)
-            if body.find('LOT_SIZE') >= 0:
-                raise InvalidOrder(self.id + ' order amount should be evenly divisible by lot size ' + body)
-            if body.find('PRICE_FILTER') >= 0:
-                raise InvalidOrder(self.id + ' order price is invalid, i.e. exceeds allowed price precision, exceeds min price or max price limits or is invalid float value in general, use self.price_to_precision(symbol, amount) ' + body)
+            if body.find("Price * QTY is zero or less") >= 0:
+                raise InvalidOrder(
+                    self.id + " order cost = amount * price is zero or less " + body
+                )
+            if body.find("LOT_SIZE") >= 0:
+                raise InvalidOrder(
+                    self.id
+                    + " order amount should be evenly divisible by lot size "
+                    + body
+                )
+            if body.find("PRICE_FILTER") >= 0:
+                raise InvalidOrder(
+                    self.id
+                    + " order price is invalid, i.e. exceeds allowed price precision, exceeds min price or max price limits or is invalid float value in general, use self.price_to_precision(symbol, amount) "
+                    + body
+                )
         if len(body) > 0:
-            if body[0] == '{':
+            if body[0] == "{":
                 # check success value for wapi endpoints
                 # response in format {'msg': 'The coin does not exist.', 'code': 0}
-                message = self.safe_string(response, 'msg')
-                error = self.safe_integer(response, 'code')
+                message = self.safe_string(response, "msg")
+                error = self.safe_integer(response, "code")
                 if message is not None and error != 0:
-                    self.throw_exactly_matched_exception(self.exceptions, message, self.id + ' ' + message)
+                    self.throw_exactly_matched_exception(
+                        self.exceptions, message, self.id + " " + message
+                    )
                 if error != 0:
                     # a workaround for {"code": 1003,"msg":"Invalid API-key, IP, or permissions for action."}
                     # despite that their message is very confusing, it is raised by Binance
                     # on a temporary ban, the API key is valid, but disabled for a while
-                    if (error == 1003) and self.options['hasAlreadyAuthenticatedSuccessfully']:
-                        raise DDoSProtection(self.id + ' temporary banned: ' + body)
-                    feedback = self.id + ' ' + url + ' ' + body
-                    self.throw_exactly_matched_exception(self.exceptions, error, feedback)
+                    if (error == 1003) and self.options[
+                        "hasAlreadyAuthenticatedSuccessfully"
+                    ]:
+                        raise DDoSProtection(self.id + " temporary banned: " + body)
+                    feedback = self.id + " " + url + " " + body
+                    self.throw_exactly_matched_exception(
+                        self.exceptions, error, feedback
+                    )
                     raise ExchangeError(feedback)
 
-    async def request(self, path, api='public', method='GET', params={}, headers=None, body=None):
+    async def request(
+        self, path, api="public", method="GET", params={}, headers=None, body=None
+    ):
         response = await self.fetch2(path, api, method, params, headers, body)
         # a workaround for {"code":-2015,"msg":"Invalid API-key, IP, or permissions for action."}
-        if (api == 'private'):
-            self.options['hasAlreadyAuthenticatedSuccessfully'] = True
+        if api == "private":
+            self.options["hasAlreadyAuthenticatedSuccessfully"] = True
         return response

@@ -24,115 +24,117 @@ from ccxt.base.decimal_to_precision import TICK_SIZE
 
 
 class krakenfu(Exchange):
-
     def describe(self):
-        return self.deep_extend(super(krakenfu, self).describe(), {
-            'id': 'krakenfu',
-            'name': 'Kraken Futures',
-            'countries': ['US'],
-            'version': 'v3',
-            'userAgent': None,
-            'rateLimit': 600,
-            'has': {
-                'cancelAllOrders': True,
-                'createMarketOrder': False,
-                'editOrder': True,
-                'fetchMyTrades': True,
-                'fetchOpenOrders': True,
-                'fetchOrders': False,
-                'fetchTicker': False,
-                'fetchTickers': True,
-            },
-            'urls': {
-                'test': {
-                    'public': 'https://demo-futures.kraken.com/derivatives',
-                    'private': 'https://demo-futures.kraken.com/derivatives',
-                    'www': 'https://demo-futures.kraken.com',
+        return self.deep_extend(
+            super(krakenfu, self).describe(),
+            {
+                "id": "krakenfu",
+                "name": "Kraken Futures",
+                "countries": ["US"],
+                "version": "v3",
+                "userAgent": None,
+                "rateLimit": 600,
+                "has": {
+                    "cancelAllOrders": True,
+                    "createMarketOrder": False,
+                    "editOrder": True,
+                    "fetchMyTrades": True,
+                    "fetchOpenOrders": True,
+                    "fetchOrders": False,
+                    "fetchTicker": False,
+                    "fetchTickers": True,
                 },
-                'logo': 'https://user-images.githubusercontent.com/24300605/81436764-b22fd580-9172-11ea-9703-742783e6376d.jpg',
-                'api': {
-                    'public': 'https://futures.kraken.com/derivatives',
-                    'private': 'https://futures.kraken.com/derivatives',
-                },
-                'www': 'https://futures.kraken.com/',
-                'doc': [
-                    'https://support.kraken.com/hc/en-us/categories/360001806372-Futures-API',
-                ],
-                'fees': 'https://support.kraken.com/hc/en-us/articles/360022835771-Transaction-fees-and-rebates-for-Kraken-Futures',
-                'referral': None,
-            },
-            'api': {
-                'public': {
-                    'get': [
-                        'instruments',
-                        'orderbook',
-                        'tickers',
-                        'history',
+                "urls": {
+                    "test": {
+                        "public": "https://demo-futures.kraken.com/derivatives",
+                        "private": "https://demo-futures.kraken.com/derivatives",
+                        "www": "https://demo-futures.kraken.com",
+                    },
+                    "logo": "https://user-images.githubusercontent.com/24300605/81436764-b22fd580-9172-11ea-9703-742783e6376d.jpg",
+                    "api": {
+                        "public": "https://futures.kraken.com/derivatives",
+                        "private": "https://futures.kraken.com/derivatives",
+                    },
+                    "www": "https://futures.kraken.com/",
+                    "doc": [
+                        "https://support.kraken.com/hc/en-us/categories/360001806372-Futures-API",
                     ],
+                    "fees": "https://support.kraken.com/hc/en-us/articles/360022835771-Transaction-fees-and-rebates-for-Kraken-Futures",
+                    "referral": None,
                 },
-                'private': {
-                    'get': [
-                        'openpositions',
-                        'notifications',
-                        'accounts',
-                        'openorders',
-                        'recentorders',
-                        'fills',
-                        'transfers',
-                    ],
-                    'post': [
-                        'sendorder',
-                        'editorder',
-                        'cancelorder',
-                        'transfer',
-                        'batchorder',
-                        'cancelallorders',
-                        'cancelallordersafter',
-                        'withdrawal',                              # for futures wallet -> kraken spot wallet
-                    ],
+                "api": {
+                    "public": {
+                        "get": [
+                            "instruments",
+                            "orderbook",
+                            "tickers",
+                            "history",
+                        ],
+                    },
+                    "private": {
+                        "get": [
+                            "openpositions",
+                            "notifications",
+                            "accounts",
+                            "openorders",
+                            "recentorders",
+                            "fills",
+                            "transfers",
+                        ],
+                        "post": [
+                            "sendorder",
+                            "editorder",
+                            "cancelorder",
+                            "transfer",
+                            "batchorder",
+                            "cancelallorders",
+                            "cancelallordersafter",
+                            "withdrawal",  # for futures wallet -> kraken spot wallet
+                        ],
+                    },
+                },
+                "fees": {
+                    "trading": {
+                        "tierBased": False,
+                        "percentage": True,
+                        "maker": -0.0002,
+                        "taker": 0.00075,
+                    },
+                },
+                "exceptions": {
+                    "exact": {
+                        "apiLimitExceeded": RateLimitExceeded,
+                        "marketUnavailable": ExchangeNotAvailable,
+                        "requiredArgumentMissing": BadRequest,
+                        "unavailable": ExchangeNotAvailable,
+                        "authenticationError": AuthenticationError,
+                        "accountInactive": ExchangeError,  # When account has no trade history / no order history. Should self error be ignored in some cases?
+                        "invalidAccount": BadRequest,  # the fromAccount or the toAccount are invalid
+                        "invalidAmount": BadRequest,
+                        "insufficientFunds": InsufficientFunds,
+                        "Bad Request": BadRequest,  # The URL contains invalid characters.(Please encode the json URL parameter)
+                        "Unavailable": InsufficientFunds,  # Insufficient funds in Futures account [withdraw]
+                    },
+                    "broad": {
+                        "invalidArgument": BadRequest,
+                        "nonceBelowThreshold": InvalidNonce,
+                        "nonceDuplicate": InvalidNonce,
+                    },
+                },
+                "precisionMode": TICK_SIZE,
+                "options": {
+                    "symbol": {
+                        "quoteIds": ["USD", "XBT"],
+                        "reversed": False,
+                    },
+                    "orderTypes": {
+                        "limit": "lmt",
+                        "stop": "stp",
+                        "IOC": "ioc",
+                    },
                 },
             },
-            'fees': {
-                'trading': {
-                    'tierBased': False,
-                    'percentage': True,
-                    'maker': -0.0002,
-                    'taker': 0.00075,
-                },
-            },
-            'exceptions': {
-                'exact': {
-                    'apiLimitExceeded': RateLimitExceeded,
-                    'marketUnavailable': ExchangeNotAvailable,
-                    'requiredArgumentMissing': BadRequest,
-                    'unavailable': ExchangeNotAvailable,
-                    'authenticationError': AuthenticationError,
-                    'accountInactive': ExchangeError,              # When account has no trade history / no order history. Should self error be ignored in some cases?
-                    'invalidAccount': BadRequest,                  # the fromAccount or the toAccount are invalid
-                    'invalidAmount': BadRequest,
-                    'insufficientFunds': InsufficientFunds,
-                    'Bad Request': BadRequest,                     # The URL contains invalid characters.(Please encode the json URL parameter)
-                    'Unavailable': InsufficientFunds,              # Insufficient funds in Futures account [withdraw]
-                },
-                'broad': {
-                    'invalidArgument': BadRequest,
-                    'nonceBelowThreshold': InvalidNonce,
-                    'nonceDuplicate': InvalidNonce,
-                },
-            },
-            'precisionMode': TICK_SIZE,
-            'options': {
-                'symbol': {
-                    'quoteIds': ['USD', 'XBT'],
-                    'reversed': False,
-                },
-                'orderTypes': {
-                    'limit': 'lmt',
-                    'stop': 'stp',
-                    'IOC': 'ioc',
-                },
-            },
-        })
+        )
 
     def fetch_markets(self, params={}):
         response = self.publicGetInstruments(params)
@@ -174,83 +176,85 @@ class krakenfu(Exchange):
         #   ],
         #   "serverTime":"2018-07-19T11:32:39.433Z"
         # }
-        instruments = response['instruments']
+        instruments = response["instruments"]
         result = []
         for i in range(0, len(instruments)):
             market = instruments[i]
             active = True
-            id = market['symbol']
+            id = market["symbol"]
             type = None
-            index = (market['type'].find(' index') >= 0)
+            index = market["type"].find(" index") >= 0
             linear = None
             inverse = None
             if not index:
-                linear = (market['type'].find('_vanilla') >= 0)
+                linear = market["type"].find("_vanilla") >= 0
                 inverse = not linear
-                settleTime = self.safe_string(market, 'lastTradingTime')
-                type = 'swap' if (settleTime is None) else 'future'
+                settleTime = self.safe_string(market, "lastTradingTime")
+                type = "swap" if (settleTime is None) else "future"
             else:
-                type = 'index'
-            swap = (type == 'swap')
-            future = (type == 'future')
+                type = "index"
+            swap = type == "swap"
+            future = type == "future"
             symbol = id
-            split = id.split('_')
+            split = id.split("_")
             parsed = self.parse_symbol_id_joined(split[1])
-            baseId = parsed['baseId']
-            quoteId = parsed['quoteId']
-            base = parsed['base']
-            quote = parsed['quote']
+            baseId = parsed["baseId"]
+            quoteId = parsed["quoteId"]
+            base = parsed["base"]
+            quote = parsed["quote"]
             # swap == perpetual
             if swap:
-                symbol = base + '/' + quote
-            lotSize = self.safe_float(market, 'contractSize')
+                symbol = base + "/" + quote
+            lotSize = self.safe_float(market, "contractSize")
             precision = {
-                'amount': None,
-                'price': self.safe_float(market, 'tickSize'),
+                "amount": None,
+                "price": self.safe_float(market, "tickSize"),
             }
             if not index:
-                precision['amount'] = 1.0  # self seems to be the case for all markets
+                precision["amount"] = 1.0  # self seems to be the case for all markets
             limits = {
-                'amount': {
-                    'min': precision['amount'],
-                    'max': None,
+                "amount": {
+                    "min": precision["amount"],
+                    "max": None,
                 },
-                'price': {
-                    'min': precision['price'],
-                    'max': None,
+                "price": {
+                    "min": precision["price"],
+                    "max": None,
                 },
-                'cost': {
-                    'min': None,
-                    'max': None,
+                "cost": {
+                    "min": None,
+                    "max": None,
                 },
             }
-            result.append({
-                'id': id,
-                'symbol': symbol,
-                'base': base,
-                'quote': quote,
-                'baseId': baseId,
-                'quoteId': quoteId,
-                'active': active,
-                'precision': precision,
-                'limits': limits,
-                'type': type,
-                'spot': False,
-                'swap': swap,
-                'future': future,
-                'prediction': False,
-                'linear': linear,
-                'inverse': inverse,
-                'lotSize': lotSize,
-                'info': market,
-            })
+            result.append(
+                {
+                    "id": id,
+                    "symbol": symbol,
+                    "base": base,
+                    "quote": quote,
+                    "baseId": baseId,
+                    "quoteId": quoteId,
+                    "active": active,
+                    "precision": precision,
+                    "limits": limits,
+                    "type": type,
+                    "spot": False,
+                    "swap": swap,
+                    "future": future,
+                    "prediction": False,
+                    "linear": linear,
+                    "inverse": inverse,
+                    "lotSize": lotSize,
+                    "info": market,
+                }
+            )
         return result
 
     def fetch_order_book(self, symbol, limit=None, params={}):
         self.load_markets()
         market = self.market(symbol)
         request = {
-            'symbol': market['id'],
+            "symbol": market["id"],
         }
         response = self.publicGetOrderbook(self.extend(request, params))
         # {
@@ -281,17 +285,17 @@ class krakenfu(Exchange):
         #       ],
         #    },
         # }
-        timestamp = self.parse8601(response['serverTime'])
-        return self.parse_order_book(response['orderBook'], symbol, timestamp)
+        timestamp = self.parse8601(response["serverTime"])
+        return self.parse_order_book(response["orderBook"], symbol, timestamp)
 
     def fetch_tickers(self, symbols=None, params={}):
         self.load_markets()
         response = self.publicGetTickers(params)
-        tickers = response['tickers']
+        tickers = response["tickers"]
         result = {}
         for i in range(0, len(tickers)):
             ticker = self.parse_ticker(tickers[i])
-            symbol = self.safe_string(ticker, 'symbol')
+            symbol = self.safe_string(ticker, "symbol")
             if symbol is not None:
                 result[symbol] = ticker
         return result
@@ -315,13 +319,13 @@ class krakenfu(Exchange):
         #    "suspended":false
         # }
         symbol = None
-        marketId = self.safe_string(ticker, 'symbol')
+        marketId = self.safe_string(ticker, "symbol")
         market = self.safe_value(self.markets_by_id, marketId, market)
         if market is not None:
-            symbol = market['symbol']
-        timestamp = self.parse8601(self.safe_string(ticker, 'lastTime'))
-        open = self.safe_float(ticker, 'open24h')
-        last = self.safe_float(ticker, 'last')
+            symbol = market["symbol"]
+        timestamp = self.parse8601(self.safe_string(ticker, "lastTime"))
+        open = self.safe_float(ticker, "open24h")
+        last = self.safe_float(ticker, "last")
         change = None
         percentage = None
         average = None
@@ -330,46 +334,46 @@ class krakenfu(Exchange):
             if open > 0:
                 percentage = change / open * 100
                 average = (open + last) / 2
-        volume = self.safe_float(ticker, 'vol24h')
+        volume = self.safe_float(ticker, "vol24h")
         baseVolume = None
         quoteVolume = None
-        if (market is not None) and (market['type'] != 'index'):
-            if market['linear']:
+        if (market is not None) and (market["type"] != "index"):
+            if market["linear"]:
                 baseVolume = volume  # pv_xrpxbt volume given in XRP
             else:
                 quoteVolume = volume  # pi_xbtusd volume given in USD
         return {
-            'symbol': symbol,
-            'timestamp': timestamp,
-            'datetime': self.iso8601(timestamp),
-            'high': None,
-            'low': None,
-            'bid': self.safe_float(ticker, 'bid'),
-            'bidVolume': self.safe_float(ticker, 'bidSize'),
-            'ask': self.safe_float(ticker, 'ask'),
-            'askVolume': self.safe_float(ticker, 'askSize'),
-            'vwap': None,
-            'open': open,
-            'close': last,
-            'last': last,
-            'previousClose': None,
-            'change': change,
-            'percentage': percentage,
-            'average': average,
-            'baseVolume': baseVolume,
-            'quoteVolume': quoteVolume,
-            'info': ticker,
+            "symbol": symbol,
+            "timestamp": timestamp,
+            "datetime": self.iso8601(timestamp),
+            "high": None,
+            "low": None,
+            "bid": self.safe_float(ticker, "bid"),
+            "bidVolume": self.safe_float(ticker, "bidSize"),
+            "ask": self.safe_float(ticker, "ask"),
+            "askVolume": self.safe_float(ticker, "askSize"),
+            "vwap": None,
+            "open": open,
+            "close": last,
+            "last": last,
+            "previousClose": None,
+            "change": change,
+            "percentage": percentage,
+            "average": average,
+            "baseVolume": baseVolume,
+            "quoteVolume": quoteVolume,
+            "info": ticker,
         }
 
     def fetch_trades(self, symbol, since=None, limit=None, params={}):
         self.load_markets()
         market = self.market(symbol)
         request = {
-            'symbol': market['id'],
+            "symbol": market["id"],
         }
         # Returns the last 100 trades from the specified lastTime value
         response = self.publicGetHistory(self.extend(request, params))
-        return self.parse_trades(response['history'], market, since, limit)
+        return self.parse_trades(response["history"], market, since, limit)
 
     def parse_trade(self, trade, market=None):
         #
@@ -421,28 +425,28 @@ class krakenfu(Exchange):
         #    "takerReducedQuantity":null,
         #    "type":"EXECUTION"
         # }
-        timestamp = self.parse8601(self.safe_string_2(trade, 'time', 'fillTime'))
-        price = self.safe_float(trade, 'price')
-        amount = self.safe_float_2(trade, 'size', 'amount', 0.0)
-        id = self.safe_string_2(trade, 'uid', 'fill_id')
+        timestamp = self.parse8601(self.safe_string_2(trade, "time", "fillTime"))
+        price = self.safe_float(trade, "price")
+        amount = self.safe_float_2(trade, "size", "amount", 0.0)
+        id = self.safe_string_2(trade, "uid", "fill_id")
         if id is None:
-            id = self.safe_string(trade, 'executionId')
-        order = self.safe_string(trade, 'order_id')
-        symbolId = self.safe_string(trade, 'symbol')
-        side = self.safe_string(trade, 'side')
+            id = self.safe_string(trade, "executionId")
+        order = self.safe_string(trade, "order_id")
+        symbolId = self.safe_string(trade, "symbol")
+        side = self.safe_string(trade, "side")
         type = None
-        priorEdit = self.safe_value(trade, 'orderPriorEdit')
-        priorExecution = self.safe_value(trade, 'orderPriorExecution')
+        priorEdit = self.safe_value(trade, "orderPriorEdit")
+        priorExecution = self.safe_value(trade, "orderPriorExecution")
         if priorExecution is not None:
-            order = self.safe_string(priorExecution, 'orderId')
-            symbolId = self.safe_string(priorExecution, 'symbol')
-            side = self.safe_string(priorExecution, 'side')
-            type = self.safe_string(priorExecution, 'type')
+            order = self.safe_string(priorExecution, "orderId")
+            symbolId = self.safe_string(priorExecution, "symbol")
+            side = self.safe_string(priorExecution, "side")
+            type = self.safe_string(priorExecution, "type")
         elif priorEdit is not None:
-            order = self.safe_string(priorEdit, 'orderId')
-            symbolId = self.safe_string(priorEdit, 'symbol')
-            side = self.safe_string(priorEdit, 'type')
-            type = self.safe_string(priorEdit, 'type')
+            order = self.safe_string(priorEdit, "orderId")
+            symbolId = self.safe_string(priorEdit, "symbol")
+            side = self.safe_string(priorEdit, "type")
+            type = self.safe_string(priorEdit, "type")
         if type is not None:
             type = self.parse_order_type(type)
         symbol = None
@@ -453,36 +457,36 @@ class krakenfu(Exchange):
                 market = None
                 symbol = symbolId
         if market is not None:
-            symbol = market['symbol']
+            symbol = market["symbol"]
         cost = None
         if (amount is not None) and (price is not None) and (market is not None):
-            if market['linear']:
+            if market["linear"]:
                 cost = amount * price  # in quote
             else:
                 cost = amount / price  # in base
-            cost *= market['lotSize']
+            cost *= market["lotSize"]
         fee = None
         takerOrMaker = None
-        fillType = self.safe_string(trade, 'fillType')
+        fillType = self.safe_string(trade, "fillType")
         if fillType is not None:
-            if fillType.find('taker') >= 0:
-                takerOrMaker = 'taker'
-            elif fillType.find('maker') >= 0:
-                takerOrMaker = 'maker'
+            if fillType.find("taker") >= 0:
+                takerOrMaker = "taker"
+            elif fillType.find("maker") >= 0:
+                takerOrMaker = "maker"
         return {
-            'timestamp': timestamp,
-            'datetime': self.iso8601(timestamp),
-            'symbol': symbol,
-            'id': id,
-            'order': order,
-            'type': type,
-            'takerOrMaker': takerOrMaker,
-            'side': side,
-            'price': price,
-            'cost': cost,
-            'amount': amount,
-            'fee': fee,
-            'info': trade,
+            "timestamp": timestamp,
+            "datetime": self.iso8601(timestamp),
+            "symbol": symbol,
+            "id": id,
+            "order": order,
+            "type": type,
+            "takerOrMaker": takerOrMaker,
+            "side": side,
+            "price": price,
+            "cost": cost,
+            "amount": amount,
+            "fee": fee,
+            "info": trade,
         }
 
     def create_order(self, symbol, type, side, amount, price=None, params={}):
@@ -504,67 +508,69 @@ class krakenfu(Exchange):
         # reduceOnly      string     Set as True if you wish the order to only reduce an existing position.
         #                            Any order which increases an existing position will be rejected. Default False.
         self.load_markets()
-        typeId = self.safe_string(self.options['orderTypes'], type, type)
+        typeId = self.safe_string(self.options["orderTypes"], type, type)
         request = {
-            'orderType': typeId,
-            'symbol': self.market_id(symbol),
-            'side': side,
-            'size': amount,
+            "orderType": typeId,
+            "symbol": self.market_id(symbol),
+            "side": side,
+            "size": amount,
         }
         if price is not None:
-            request['limitPrice'] = price
+            request["limitPrice"] = price
         response = self.privatePostSendorder(self.extend(request, params))
-        status = self.safe_string(response['sendStatus'], 'status')
-        self.verify_order_action_success(status, 'placed', ['filled'])
-        order = self.parse_order(response['sendStatus'])
-        id = self.safe_string(order, 'id')
+        status = self.safe_string(response["sendStatus"], "status")
+        self.verify_order_action_success(status, "placed", ["filled"])
+        order = self.parse_order(response["sendStatus"])
+        id = self.safe_string(order, "id")
         self.orders[id] = order
-        return self.extend({'info': response}, order)
+        return self.extend({"info": response}, order)
 
     def edit_order(self, id, symbol, type, side, amount=None, price=None, params={}):
         self.load_markets()
         request = {
-            'orderId': id,
+            "orderId": id,
         }
         if amount is not None:
-            request['size'] = amount
+            request["size"] = amount
         if price is not None:
-            request['limitPrice'] = price
+            request["limitPrice"] = price
         response = self.privatePostEditorder(self.extend(request, params))
-        status = self.safe_string(response['editStatus'], 'status')
-        self.verify_order_action_success(status, 'edited', ['filled'])
-        order = self.parse_order(response['editStatus'])
-        self.orders[order['id']] = order
-        return self.extend({'info': response}, order)
+        status = self.safe_string(response["editStatus"], "status")
+        self.verify_order_action_success(status, "edited", ["filled"])
+        order = self.parse_order(response["editStatus"])
+        self.orders[order["id"]] = order
+        return self.extend({"info": response}, order)
 
     def cancel_order(self, id, symbol=None, params={}):
         self.load_markets()
-        response = self.privatePostCancelorder(self.extend({'order_id': id}, params))
-        status = self.safe_string(self.safe_value(response, 'cancelStatus', {}), 'status')
-        self.verify_order_action_success(status, 'canceled')
+        response = self.privatePostCancelorder(self.extend({"order_id": id}, params))
+        status = self.safe_string(
+            self.safe_value(response, "cancelStatus", {}), "status"
+        )
+        self.verify_order_action_success(status, "canceled")
         order = {}
-        if 'cancelStatus' in response:
-            order = self.parse_order(response['cancelStatus'])
-            self.orders[order['id']] = order
-        return self.extend({'info': response}, order)
+        if "cancelStatus" in response:
+            order = self.parse_order(response["cancelStatus"])
+            self.orders[order["id"]] = order
+        return self.extend({"info": response}, order)
 
     def cancel_all_orders(self, symbol=None, params={}):
         request = {}
         if symbol is not None:
-            request['symbol'] = self.market_id(symbol)
+            request["symbol"] = self.market_id(symbol)
         response = self.privatePostCancelallorders(self.extend(request, params))
-        cancelStatus = self.safe_value(response, 'cancelStatus', {})
-        cancelledOrders = self.safe_value(cancelStatus, 'cancelledOrders', [])
+        cancelStatus = self.safe_value(response, "cancelStatus", {})
+        cancelledOrders = self.safe_value(cancelStatus, "cancelledOrders", [])
         for i in range(0, len(cancelledOrders)):
-            id = self.safe_string(cancelledOrders[i], 'order_id')
+            id = self.safe_string(cancelledOrders[i], "order_id")
             if id in self.orders:
-                self.orders[id]['status'] = 'canceled'
-                self.orders[id]['remaining'] = 0.0
+                self.orders[id]["status"] = "canceled"
+                self.orders[id]["remaining"] = 0.0
         return response
 
     def fetch_orders(self, symbol=None, since=None, limit=None, params={}):
         # The returned orderEvents are yet again in entirely different format, what a mess
-        raise NotSupported(self.id + ' fetchOrders not supprted yet')
+        raise NotSupported(self.id + " fetchOrders not supprted yet")
         # self.load_markets()
         # market = None
         # request = {}
@@ -581,69 +587,71 @@ class krakenfu(Exchange):
         if symbol is not None:
             market = self.market(symbol)
         response = self.privateGetOpenorders(params)
-        return self.parse_orders(response['openOrders'], market, since, limit)
+        return self.parse_orders(response["openOrders"], market, since, limit)
 
     def parse_order_type(self, orderType):
         map = {
-            'lmt': 'limit',
-            'stp': 'stop',
+            "lmt": "limit",
+            "stp": "stop",
         }
         return self.safe_string(map, orderType, orderType)
 
-    def verify_order_action_success(self, status, action='placed/edited/canceled', omit=[]):
+    def verify_order_action_success(
+        self, status, action="placed/edited/canceled", omit=[]
+    ):
         errors = {
-            'invalidOrderType': InvalidOrder,
-            'invalidSide': InvalidOrder,
-            'invalidSize': InvalidOrder,
-            'invalidPrice': InvalidOrder,
-            'insufficientAvailableFunds': InsufficientFunds,
-            'selfFill': ExchangeError,
-            'tooManySmallOrders': ExchangeError,
-            'maxPositionViolation': BadRequest,
-            'marketSuspended': ExchangeNotAvailable,
-            'marketInactive': ExchangeNotAvailable,
-            'clientOrderIdAlreadyExist': DuplicateOrderId,
-            'clientOrderIdTooLong': BadRequest,
-            'outsidePriceCollar': InvalidOrder,
-            'postWouldExecute': OrderImmediatelyFillable,  # the unplaced order could actually be parsed(with status = "rejected"), but there is self specific error for self
-            'iocWouldNotExecute': OrderNotFillable,  # -||-
-            'wouldNotReducePosition': ExchangeError,
-            'orderForEditNotFound': OrderNotFound,
-            'orderForEditNotAStop': InvalidOrder,
-            'filled': OrderNotFound,
-            'notFound': OrderNotFound,
+            "invalidOrderType": InvalidOrder,
+            "invalidSide": InvalidOrder,
+            "invalidSize": InvalidOrder,
+            "invalidPrice": InvalidOrder,
+            "insufficientAvailableFunds": InsufficientFunds,
+            "selfFill": ExchangeError,
+            "tooManySmallOrders": ExchangeError,
+            "maxPositionViolation": BadRequest,
+            "marketSuspended": ExchangeNotAvailable,
+            "marketInactive": ExchangeNotAvailable,
+            "clientOrderIdAlreadyExist": DuplicateOrderId,
+            "clientOrderIdTooLong": BadRequest,
+            "outsidePriceCollar": InvalidOrder,
+            "postWouldExecute": OrderImmediatelyFillable,  # the unplaced order could actually be parsed(with status = "rejected"), but there is self specific error for self
+            "iocWouldNotExecute": OrderNotFillable,  # -||-
+            "wouldNotReducePosition": ExchangeError,
+            "orderForEditNotFound": OrderNotFound,
+            "orderForEditNotAStop": InvalidOrder,
+            "filled": OrderNotFound,
+            "notFound": OrderNotFound,
         }
         if (status in errors) and not self.in_array(status, omit):
-            raise errors[status](self.id + ' order cannot be ' + action + ': ' + status)
+            raise errors[status](self.id + " order cannot be " + action + ": " + status)
 
     def parse_order_status(self, status):
         statuses = {
-            'placed': 'open',  # the order was placed successfully
-            'cancelled': 'canceled',  # the order was cancelled successfully
-            'invalidOrderType': 'rejected',  # the order was not placed because orderType is invalid
-            'invalidSide': 'rejected',  # the order was not placed because side is invalid
-            'invalidSize': 'rejected',  # the order was not placed because size is invalid
-            'invalidPrice': 'rejected',  # the order was not placed because limitPrice and/or stopPrice are invalid
-            'insufficientAvailableFunds': 'rejected',  # the order was not placed because available funds are insufficient
-            'selfFill': 'rejected',  # the order was not placed because it would be filled against an existing order belonging to the same account
-            'tooManySmallOrders': 'rejected',  # the order was not placed because the number of small open orders would exceed the permissible limit
-            'maxPositionViolation': 'rejected',  # Order would cause you to exceed your maximum position in self contract.
-            'marketSuspended': 'rejected',  # the order was not placed because the market is suspended
-            'marketInactive': 'rejected',  # the order was not placed because the market is inactive
-            'clientOrderIdAlreadyExist': 'rejected',  # the specified client id already exist
-            'clientOrderIdTooLong': 'rejected',  # the client id is longer than the permissible limit
-            'outsidePriceCollar': 'rejected',  # the limit order crosses the spread but is an order of magnitude away from the mark price - fat finger control
+            "placed": "open",  # the order was placed successfully
+            "cancelled": "canceled",  # the order was cancelled successfully
+            "invalidOrderType": "rejected",  # the order was not placed because orderType is invalid
+            "invalidSide": "rejected",  # the order was not placed because side is invalid
+            "invalidSize": "rejected",  # the order was not placed because size is invalid
+            "invalidPrice": "rejected",  # the order was not placed because limitPrice and/or stopPrice are invalid
+            "insufficientAvailableFunds": "rejected",  # the order was not placed because available funds are insufficient
+            "selfFill": "rejected",  # the order was not placed because it would be filled against an existing order belonging to the same account
+            "tooManySmallOrders": "rejected",  # the order was not placed because the number of small open orders would exceed the permissible limit
+            "maxPositionViolation": "rejected",  # Order would cause you to exceed your maximum position in self contract.
+            "marketSuspended": "rejected",  # the order was not placed because the market is suspended
+            "marketInactive": "rejected",  # the order was not placed because the market is inactive
+            "clientOrderIdAlreadyExist": "rejected",  # the specified client id already exist
+            "clientOrderIdTooLong": "rejected",  # the client id is longer than the permissible limit
+            "outsidePriceCollar": "rejected",  # the limit order crosses the spread but is an order of magnitude away from the mark price - fat finger control
             # Should the next two be 'expired' ?
-            'postWouldExecute': 'rejected',  # the post-only order would be filled upon placement, thus is cancelled
-            'iocWouldNotExecute': 'rejected',  # the immediate-or-cancel order would not execute.
-            'wouldNotReducePosition': 'rejected',  # the reduce only order would not reduce position.
-            'edited': 'open',  # the order was edited successfully
-            'orderForEditNotFound': 'rejected',  # the requested order for edit has not been found
-            'orderForEditNotAStop': 'rejected',  # the supplied stopPrice cannot be applied because order is not a stop order
-            'filled': 'closed',  # the order was found completely filled and could not be cancelled
-            'notFound': 'rejected',  # the order was not found, either because it had already been cancelled or it never existed
-            'untouched': 'open',  # the entire size of the order is unfilled
-            'partiallyFilled': 'open',  # the size of the order is partially but not entirely filled
+            "postWouldExecute": "rejected",  # the post-only order would be filled upon placement, thus is cancelled
+            "iocWouldNotExecute": "rejected",  # the immediate-or-cancel order would not execute.
+            "wouldNotReducePosition": "rejected",  # the reduce only order would not reduce position.
+            "edited": "open",  # the order was edited successfully
+            "orderForEditNotFound": "rejected",  # the requested order for edit has not been found
+            "orderForEditNotAStop": "rejected",  # the supplied stopPrice cannot be applied because order is not a stop order
+            "filled": "closed",  # the order was found completely filled and could not be cancelled
+            "notFound": "rejected",  # the order was not found, either because it had already been cancelled or it never existed
+            "untouched": "open",  # the entire size of the order is unfilled
+            "partiallyFilled": "open",  # the size of the order is partially but not entirely filled
         }
         return self.safe_string(statuses, status, status)
 
@@ -838,7 +846,7 @@ class krakenfu(Exchange):
         #     "lastUpdateTime":"2019-09-05T17:01:17.410Z"
         # }
         #
-        orderEvents = self.safe_value(order, 'orderEvents', [])
+        orderEvents = self.safe_value(order, "orderEvents", [])
         details = None
         isPrior = False
         fixed = False
@@ -849,56 +857,71 @@ class krakenfu(Exchange):
             executions = []
             for i in range(0, len(orderEvents)):
                 item = orderEvents[i]
-                if self.safe_string(item, 'type') == 'EXECUTION':
+                if self.safe_string(item, "type") == "EXECUTION":
                     executions.append(item)
                 # Final order(after placement / editing / execution / canceling)
-                if ('new' in item) or ('order' in item) or ('orderTrigger' in item):
-                    details = self.safe_value_2(item, 'new', 'order')
+                if ("new" in item) or ("order" in item) or ("orderTrigger" in item):
+                    details = self.safe_value_2(item, "new", "order")
                     if details is None:
-                        details = item['orderTrigger']
+                        details = item["orderTrigger"]
                     isPrior = False
                     fixed = True
-                elif (('orderPriorEdit' in item) or ('orderPriorExecution' in item)) and (not fixed) and (details is None):
-                    details = self.safe_value_2(item, 'orderPriorExecution', 'orderPriorEdit')
-                    if 'orderPriorExecution' in item:
-                        price = self.safe_float(item['orderPriorExecution'], 'limitPrice')
+                elif (
+                    (("orderPriorEdit" in item) or ("orderPriorExecution" in item))
+                    and (not fixed)
+                    and (details is None)
+                ):
+                    details = self.safe_value_2(
+                        item, "orderPriorExecution", "orderPriorEdit"
+                    )
+                    if "orderPriorExecution" in item:
+                        price = self.safe_float(
+                            item["orderPriorExecution"], "limitPrice"
+                        )
                     isPrior = True
             trades = self.parse_trades(executions)
-            statusId = self.safe_string(order, 'status')
+            statusId = self.safe_string(order, "status")
         if details is None:
             details = order
         if statusId is None:
-            statusId = self.safe_string(details, 'status')
+            statusId = self.safe_string(details, "status")
         # This may be incorrectly marked as "open" if only execution report is given,
         # but will be fixed below
         status = self.parse_order_status(statusId)
-        isClosed = self.in_array(status, ['canceled', 'rejected', 'closed'])
+        isClosed = self.in_array(status, ["canceled", "rejected", "closed"])
         symbol = None
         if market is not None:
-            symbol = market['symbol']
+            symbol = market["symbol"]
         else:
-            marketId = self.safe_string(details, 'symbol')
+            marketId = self.safe_string(details, "symbol")
             if marketId in self.markets_by_id:
                 market = self.markets_by_id[marketId]
-                symbol = market['symbol']
-        timestamp = self.parse8601(self.safe_string_2(details, 'timestamp', 'receivedTime'))
+                symbol = market["symbol"]
+        timestamp = self.parse8601(
+            self.safe_string_2(details, "timestamp", "receivedTime")
+        )
         lastTradeTimestamp = None
         if price is None:
-            price = self.safe_float(details, 'limitPrice')
-        amount = self.safe_float(details, 'quantity')
-        filled = self.safe_float_2(details, 'filledSize', 'filled', 0.0)
-        remaining = self.safe_float(details, 'unfilledSize')
+            price = self.safe_float(details, "limitPrice")
+        amount = self.safe_float(details, "quantity")
+        filled = self.safe_float_2(details, "filledSize", "filled", 0.0)
+        remaining = self.safe_float(details, "unfilledSize")
         average = None
         filled2 = 0.0
         if len(trades) > 0:
             vwapSum = 0.0
             for i in range(0, len(trades)):
                 trade = trades[i]
-                filled2 += trade['amount']
-                vwapSum += trade['amount'] * trade['price']
+                filled2 += trade["amount"]
+                vwapSum += trade["amount"] * trade["price"]
             average = vwapSum / filled2
-            if (amount is not None) and (not isClosed) and isPrior and (filled2 >= amount):
-                status = 'closed'
+            if (
+                (amount is not None)
+                and (not isClosed)
+                and isPrior
+                and (filled2 >= amount)
+            ):
+                status = "closed"
                 isClosed = True
             if isPrior:
                 filled = filled + filled2
@@ -918,34 +941,36 @@ class krakenfu(Exchange):
         if (filled is not None) and (market is not None):
             whichPrice = average if (average is not None) else price
             if whichPrice is not None:
-                if market['linear']:
+                if market["linear"]:
                     cost = filled * whichPrice  # in quote
                 else:
                     cost = filled / whichPrice  # in base
-                cost *= market['lotSize']
-        id = self.safe_string_2(order, 'order_id', 'orderId')
+                cost *= market["lotSize"]
+        id = self.safe_string_2(order, "order_id", "orderId")
         if id is None:
-            id = self.safe_string_2(details, 'orderId', 'uid')
-        type = self.parse_order_type(self.safe_string_lower_2(details, 'type', 'orderType'))
-        side = self.safe_string(details, 'side')
+            id = self.safe_string_2(details, "orderId", "uid")
+        type = self.parse_order_type(
+            self.safe_string_lower_2(details, "type", "orderType")
+        )
+        side = self.safe_string(details, "side")
         return {
-            'id': id,
-            'timestamp': timestamp,
-            'datetime': self.iso8601(timestamp),
-            'lastTradeTimestamp': lastTradeTimestamp,
-            'symbol': symbol,
-            'type': type,
-            'side': side,
-            'price': price,
-            'amount': amount,
-            'cost': cost,
-            'average': average,
-            'filled': filled,
-            'remaining': remaining,
-            'status': status,
-            'fee': None,
-            'trades': trades,
-            'info': order,
+            "id": id,
+            "timestamp": timestamp,
+            "datetime": self.iso8601(timestamp),
+            "lastTradeTimestamp": lastTradeTimestamp,
+            "symbol": symbol,
+            "type": type,
+            "side": side,
+            "price": price,
+            "amount": amount,
+            "cost": cost,
+            "average": average,
+            "filled": filled,
+            "remaining": remaining,
+            "status": status,
+            "fee": None,
+            "trades": trades,
+            "info": order,
         }
 
     def fetch_my_trades(self, symbol=None, since=None, limit=None, params={}):
@@ -972,7 +997,7 @@ class krakenfu(Exchange):
         #       ...
         #    ]
         # }
-        return self.parse_trades(response['fills'], market, since, limit)
+        return self.parse_trades(response["fills"], market, since, limit)
 
     def fetch_balance(self, params={}):
         self.load_markets()
@@ -1019,10 +1044,10 @@ class krakenfu(Exchange):
         #        ...
         #    },
         # }
-        result = {'info': response}
-        accounts = self.safe_value(response, 'accounts', {})
-        cash = self.safe_value(accounts, 'cash', {})
-        cashBalances = self.safe_value(cash, 'balances', {})
+        result = {"info": response}
+        accounts = self.safe_value(response, "accounts", {})
+        cash = self.safe_value(accounts, "cash", {})
+        cashBalances = self.safe_value(cash, "balances", {})
         # This contains the actually usable margin by each market,
         # but ccxt does not support such format
         # bySymbol = self.omit(accounts, 'cash')
@@ -1031,21 +1056,36 @@ class krakenfu(Exchange):
             currencyId = currencyIds[i]
             code = self.safe_currency_code(currencyId)
             account = self.account()
-            account['total'] = self.safe_float(cashBalances, currencyId)
+            account["total"] = self.safe_float(cashBalances, currencyId)
             result[code] = account
         return self.parse_balance(result)
 
-    def handle_errors(self, code, reason, url, method, headers, body, response, requestHeaders, requestBody):
+    def handle_errors(
+        self,
+        code,
+        reason,
+        url,
+        method,
+        headers,
+        body,
+        response,
+        requestHeaders,
+        requestBody,
+    ):
         if response is None:
             return
         if code == 429:
-            raise DDoSProtection(self.id + ' ' + body)
-        message = self.safe_string(response, 'error')
+            raise DDoSProtection(self.id + " " + body)
+        message = self.safe_string(response, "error")
         if message is None:
             return
-        feedback = self.id + ' ' + body
-        self.throw_exactly_matched_exception(self.exceptions['exact'], message, feedback)
-        self.throw_broadly_matched_exception(self.exceptions['broad'], message, feedback)
+        feedback = self.id + " " + body
+        self.throw_exactly_matched_exception(
+            self.exceptions["exact"], message, feedback
+        )
+        self.throw_broadly_matched_exception(
+            self.exceptions["broad"], message, feedback
+        )
         if code == 400:
             raise BadRequest(feedback)
         raise ExchangeError(feedback)  # unknown message
@@ -1053,9 +1093,9 @@ class krakenfu(Exchange):
     def parse_symbol_id_joined(self, symbolId):
         # Convert by detecting and converting currencies in symbol
         symbolIdLower = symbolId.lower()
-        quoteIds = self.options['symbol']['quoteIds']
-        reversed = self.options['symbol']['reversed']
-        method = 'startsWith' if reversed else 'endsWith'
+        quoteIds = self.options["symbol"]["quoteIds"]
+        reversed = self.options["symbol"]["reversed"]
+        method = "startsWith" if reversed else "endsWith"
         quoteId = None
         baseId = None
         for i in range(0, len(quoteIds)):
@@ -1063,7 +1103,7 @@ class krakenfu(Exchange):
                 quoteId = quoteIds[i]
                 break
         if quoteId is None:
-            raise BadSymbol(self.id + ' symbolId could not be parsed: ' + symbolId)
+            raise BadSymbol(self.id + " symbolId could not be parsed: " + symbolId)
         if not reversed:
             baseIdLength = len(symbolId) - len(quoteId)
             baseId = self.slice_string(symbolId, 0, baseIdLength)
@@ -1072,10 +1112,10 @@ class krakenfu(Exchange):
             quoteId = self.slice_string(symbolId, 0, len(quoteId))
             baseId = self.slice_string(symbolId, len(quoteId))
         return {
-            'baseId': baseId,
-            'quoteId': quoteId,
-            'base': self.safe_currency_code(baseId),
-            'quote': self.safe_currency_code(quoteId),
+            "baseId": baseId,
+            "quoteId": quoteId,
+            "base": self.safe_currency_code(baseId),
+            "quote": self.safe_currency_code(quoteId),
         }
 
     def starts_with(self, string, x):
@@ -1095,24 +1135,26 @@ class krakenfu(Exchange):
     def nonce(self):
         return str(self.milliseconds())
 
-    def sign(self, path, api='public', method='GET', params={}, headers=None, body=None):
-        endpoint = '/api/' + self.version + '/' + path
+    def sign(
+        self, path, api="public", method="GET", params={}, headers=None, body=None
+    ):
+        endpoint = "/api/" + self.version + "/" + path
         query = endpoint
-        postData = ''
+        postData = ""
         if params:
             postData = self.urlencode(params)
-            query += '?' + postData
-        url = self.urls['api'][api] + query
-        if api == 'private':
-            nonce = ''  # self.nonce()
+            query += "?" + postData
+        url = self.urls["api"][api] + query
+        if api == "private":
+            nonce = ""  # self.nonce()
             auth = postData + nonce + endpoint  # 1
-            hash = self.hash(self.encode(auth), 'sha256', 'binary')  # 2
+            hash = self.hash(self.encode(auth), "sha256", "binary")  # 2
             secret = self.base64_to_binary(self.secret)  # 3
-            signature = self.hmac(hash, secret, hashlib.sha512, 'base64')  # 4-5
+            signature = self.hmac(hash, secret, hashlib.sha512, "base64")  # 4-5
             headers = {
-                'Content-Type': 'application/json',
-                'APIKey': self.apiKey,
-                'Authent': signature,
+                "Content-Type": "application/json",
+                "APIKey": self.apiKey,
+                "Authent": signature,
             }
             # headers['Nonce'] = nonce
-        return {'url': url, 'method': method, 'body': body, 'headers': headers}
+        return {"url": url, "method": method, "body": body, "headers": headers}

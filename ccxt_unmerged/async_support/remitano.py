@@ -12,67 +12,69 @@ from ccxt.base.errors import NotSupported
 
 
 class remitano(Exchange):
-
     def describe(self):
-        return self.deep_extend(super(remitano, self).describe(), {
-            'id': 'remitano',
-            'name': 'Remitano',
-            'countries': ['VN', 'NG', 'MY', 'CN', 'KH'],
-            'rateLimit': 500,  # milliseconds
-            'has': {
-                'cancelOrder': True,
-                'createOrder': True,
-                'fetchBalance': True,
-                'fetchCurrencies': True,
-                'fetchMarkets': True,
-                'fetchOHLCV': False,
-                'fetchOrderBook': True,
-                'fetchTicker': False,
-                'fetchTrades': False,
-                'withdraw': True,
-            },
-            'urls': {
-                'logo': 'https://user-images.githubusercontent.com/59945063/89111386-54fca500-d47f-11ea-9304-397e37c3ad72.png',
-                'api': 'https://api.remitano.com/api/v1',
-                'www': 'https://remitano.com/',
-                'referral': 'https://remitano.com/btc/?utm_source=github&utm_medium=ccxt&utm_campaign=github-featured-exchange',
-                'doc': 'https://developers.remitano.com/',
-            },
-            'api': {
-                'public': {
-                    'get': [
-                        'altcoins',
-                        'rates/ads',
-                        'markets/{symbol}/order_book',
-                    ],
+        return self.deep_extend(
+            super(remitano, self).describe(),
+            {
+                "id": "remitano",
+                "name": "Remitano",
+                "countries": ["VN", "NG", "MY", "CN", "KH"],
+                "rateLimit": 500,  # milliseconds
+                "has": {
+                    "cancelOrder": True,
+                    "createOrder": True,
+                    "fetchBalance": True,
+                    "fetchCurrencies": True,
+                    "fetchMarkets": True,
+                    "fetchOHLCV": False,
+                    "fetchOrderBook": True,
+                    "fetchTicker": False,
+                    "fetchTrades": False,
+                    "withdraw": True,
                 },
-                'private': {
-                    'get': [
-                        'users/coin_accounts',
-                    ],
-                    'post': [
-                        'offers',
-                        'coin_withdrawals',
-                    ],
-                    'put': [
-                        'my_offers/{id}/disable',
-                    ],
+                "urls": {
+                    "logo": "https://user-images.githubusercontent.com/59945063/89111386-54fca500-d47f-11ea-9304-397e37c3ad72.png",
+                    "api": "https://api.remitano.com/api/v1",
+                    "www": "https://remitano.com/",
+                    "referral": "https://remitano.com/btc/?utm_source=github&utm_medium=ccxt&utm_campaign=github-featured-exchange",
+                    "doc": "https://developers.remitano.com/",
+                },
+                "api": {
+                    "public": {
+                        "get": [
+                            "altcoins",
+                            "rates/ads",
+                            "markets/{symbol}/order_book",
+                        ],
+                    },
+                    "private": {
+                        "get": [
+                            "users/coin_accounts",
+                        ],
+                        "post": [
+                            "offers",
+                            "coin_withdrawals",
+                        ],
+                        "put": [
+                            "my_offers/{id}/disable",
+                        ],
+                    },
+                },
+                # guide to get key: https://developers.remitano.com/docs/guides/generate-new-key
+                "requiredCredentials": {
+                    "apiKey": True,
+                    "secret": True,
+                },
+                "exceptions": {
+                    "400": BadRequest,
+                    "401": PermissionDenied,
+                    "404": OrderNotFound,
                 },
             },
-            # guide to get key: https://developers.remitano.com/docs/guides/generate-new-key
-            'requiredCredentials': {
-                'apiKey': True,
-                'secret': True,
-            },
-            'exceptions': {
-                '400': BadRequest,
-                '401': PermissionDenied,
-                '404': OrderNotFound,
-            },
-        })
+        )
 
     def default_coins(self):
-        return ['btc', 'eth', 'usdt', 'bch', 'ltc', 'xrp']
+        return ["btc", "eth", "usdt", "bch", "ltc", "xrp"]
 
     def default_coin_currencies(self):
         result = {}
@@ -82,31 +84,31 @@ class remitano(Exchange):
             coin = defaultCoins[i]
             code = self.safe_currency_code(coin)
             result[code] = {
-                'id': coin,
-                'code': code,
-                'name': coin,
-                'active': True,
-                'fee': None,
-                'precision': None,
-                'type': 'crypto',
-                'limits': {
-                    'amount': {
-                        'min': None,
-                        'max': None,
+                "id": coin,
+                "code": code,
+                "name": coin,
+                "active": True,
+                "fee": None,
+                "precision": None,
+                "type": "crypto",
+                "limits": {
+                    "amount": {
+                        "min": None,
+                        "max": None,
                     },
-                    'price': {
-                        'min': None,
-                        'max': None,
+                    "price": {
+                        "min": None,
+                        "max": None,
                     },
-                    'cost': {
-                        'min': None,
-                        'max': None,
+                    "cost": {
+                        "min": None,
+                        "max": None,
                     },
-                    'withdraw': {
-                        'min': None,
-                        'max': None,
+                    "withdraw": {
+                        "min": None,
+                        "max": None,
                     },
-                    'info': coin,
+                    "info": coin,
                 },
             }
         return result
@@ -115,11 +117,13 @@ class remitano(Exchange):
         await self.load_markets()
         market = self.market(symbol)
         request = {
-            'symbol': market['id'],
+            "symbol": market["id"],
         }
         if limit is not None:
-            request['limit'] = 50
-        response = await self.publicGetMarketsSymbolOrderBook(self.extend(request, params))
+            request["limit"] = 50
+        response = await self.publicGetMarketsSymbolOrderBook(
+            self.extend(request, params)
+        )
         # {
         #     "bids": [...],
         #     "asks": [...]
@@ -129,50 +133,55 @@ class remitano(Exchange):
     async def create_order(self, symbol, type, side, amount, price=None, params={}):
         await self.load_markets()
         market = self.market(symbol)
-        if type != 'limit':
-            raise NotSupported(self.id + ' not supported type ' + type + 'for create order, please use type: limit')
-        coinCurrency = self.currency(market['base'])
-        fiatCurrency = self.currency(market['quote'])
+        if type != "limit":
+            raise NotSupported(
+                self.id
+                + " not supported type "
+                + type
+                + "for create order, please use type: limit"
+            )
+        coinCurrency = self.currency(market["base"])
+        fiatCurrency = self.currency(market["quote"])
         request = {
-            'payment_method': 'fiat_wallet',
-            'coin_currency': coinCurrency['id'].lower(),
-            'currency': fiatCurrency['id'].upper(),
-            'offer_type': side,
-            'price': price,
-            'total_amount': amount,
+            "payment_method": "fiat_wallet",
+            "coin_currency": coinCurrency["id"].lower(),
+            "currency": fiatCurrency["id"].upper(),
+            "offer_type": side,
+            "price": price,
+            "total_amount": amount,
         }
         response = await self.privatePostOffers(self.extend(request, params))
         return {
-            'id': self.safe_string(response, 'id'),
-            'clientOrderId': None,
-            'info': response,
-            'timestamp': None,
-            'datetime': None,
-            'lastTradeTimestamp': None,
-            'status': self.safe_string(response, 'status'),
-            'symbol': symbol,
-            'type': type,
-            'side': side,
-            'price': price,
-            'cost': None,
-            'amount': amount,
-            'filled': None,
-            'average': None,
-            'remaining': None,
-            'fee': None,
-            'trades': None,
+            "id": self.safe_string(response, "id"),
+            "clientOrderId": None,
+            "info": response,
+            "timestamp": None,
+            "datetime": None,
+            "lastTradeTimestamp": None,
+            "status": self.safe_string(response, "status"),
+            "symbol": symbol,
+            "type": type,
+            "side": side,
+            "price": price,
+            "cost": None,
+            "amount": amount,
+            "filled": None,
+            "average": None,
+            "remaining": None,
+            "fee": None,
+            "trades": None,
         }
 
     async def cancel_order(self, id, symbol=None, params={}):
         await self.load_markets()
         request = {
-            'id': int(id),
+            "id": int(id),
         }
         response = await self.privatePutMyOffersIdDisable(self.extend(request, params))
         return {
-            'id': id,
-            'info': response,
-            'status': 'canceled',
+            "id": id,
+            "info": response,
+            "status": "canceled",
         }
 
     async def fetch_balance(self, params={}):
@@ -193,15 +202,15 @@ class remitano(Exchange):
         #     address_with_type_arr: [{type: 'btc', address: '3KDvouReT7nmKNuvhNoj9WfLWsPvXCxsN7'}]
         # },...]
         accountsLength = len(response)
-        result = {'info': response}
+        result = {"info": response}
         for i in range(0, accountsLength):
             data = response[i]
             account = self.account()
-            currencyId = self.safe_string(data, 'currency')
+            currencyId = self.safe_string(data, "currency")
             code = self.safe_currency_code(currencyId)
-            account['free'] = self.safe_float(data, 'available_withdrawable_balance')
-            account['used'] = self.safe_float(data, 'frozen_balance')
-            account['total'] = self.safe_float(data, 'balance')
+            account["free"] = self.safe_float(data, "available_withdrawable_balance")
+            account["used"] = self.safe_float(data, "frozen_balance")
+            account["total"] = self.safe_float(data, "balance")
             result[code] = account
         return self.parse_balance(result)
 
@@ -223,34 +232,34 @@ class remitano(Exchange):
         altcoinsLength = len(altcoins)
         for i in range(0, altcoinsLength):
             currency = altcoins[i]
-            id = self.safe_string(currency, 'currency')
+            id = self.safe_string(currency, "currency")
             code = self.safe_currency_code(id)
             result[code] = {
-                'id': id,
-                'code': code,
-                'name': self.safe_string(currency, 'name'),
-                'active': True,
-                'fee': None,
-                'precision': None,
-                'type': 'crypto',
-                'limits': {
-                    'amount': {
-                        'min': None,
-                        'max': None,
+                "id": id,
+                "code": code,
+                "name": self.safe_string(currency, "name"),
+                "active": True,
+                "fee": None,
+                "precision": None,
+                "type": "crypto",
+                "limits": {
+                    "amount": {
+                        "min": None,
+                        "max": None,
                     },
-                    'price': {
-                        'min': None,
-                        'max': None,
+                    "price": {
+                        "min": None,
+                        "max": None,
                     },
-                    'cost': {
-                        'min': None,
-                        'max': None,
+                    "cost": {
+                        "min": None,
+                        "max": None,
                     },
-                    'withdraw': {
-                        'min': None,
-                        'max': None,
+                    "withdraw": {
+                        "min": None,
+                        "max": None,
                     },
-                    'info': currency,
+                    "info": currency,
                 },
             }
         # fiats
@@ -276,34 +285,34 @@ class remitano(Exchange):
         countryCodesLength = len(countryCodes)
         for i in range(0, countryCodesLength):
             currency = fiats[countryCodes[i]]
-            id = self.safe_string(currency, 'currency')
+            id = self.safe_string(currency, "currency")
             code = self.safe_currency_code(id)
             result[code] = {
-                'id': id,
-                'code': code,
-                'name': id,
-                'active': True,
-                'fee': None,
-                'precision': None,
-                'type': 'fiat',
-                'limits': {
-                    'amount': {
-                        'min': None,
-                        'max': None,
+                "id": id,
+                "code": code,
+                "name": id,
+                "active": True,
+                "fee": None,
+                "precision": None,
+                "type": "fiat",
+                "limits": {
+                    "amount": {
+                        "min": None,
+                        "max": None,
                     },
-                    'price': {
-                        'min': None,
-                        'max': None,
+                    "price": {
+                        "min": None,
+                        "max": None,
                     },
-                    'cost': {
-                        'min': None,
-                        'max': None,
+                    "cost": {
+                        "min": None,
+                        "max": None,
                     },
-                    'withdraw': {
-                        'min': None,
-                        'max': None,
+                    "withdraw": {
+                        "min": None,
+                        "max": None,
                     },
-                    'info': currency,
+                    "info": currency,
                 },
             }
         return result
@@ -335,33 +344,35 @@ class remitano(Exchange):
             for i in range(0, len(defaults)):
                 # create order only have COIN/FIAT
                 baseId = defaults[i]
-                quoteId = self.safe_string(country, 'currency')
+                quoteId = self.safe_string(country, "currency")
                 base = self.safe_currency_code(baseId)
                 quote = self.safe_currency_code(quoteId)
                 id = base + quote
-                symbol = base + '/' + quote
+                symbol = base + "/" + quote
                 active = True
-                result.append({
-                    'id': id,
-                    'symbol': symbol,
-                    'base': base,
-                    'quote': quote,
-                    'baseId': baseId,
-                    'quoteId': quoteId,
-                    'active': active,
-                    'info': country,
-                    'precision': None,
-                    'limits': {
-                        'amount': {
-                            'min': None,
-                            'max': None,
+                result.append(
+                    {
+                        "id": id,
+                        "symbol": symbol,
+                        "base": base,
+                        "quote": quote,
+                        "baseId": baseId,
+                        "quoteId": quoteId,
+                        "active": active,
+                        "info": country,
+                        "precision": None,
+                        "limits": {
+                            "amount": {
+                                "min": None,
+                                "max": None,
+                            },
+                            "price": {
+                                "min": None,
+                                "max": None,
+                            },
                         },
-                        'price': {
-                            'min': None,
-                            'max': None,
-                        },
-                    },
-                })
+                    }
+                )
         return result
 
     async def withdraw(self, code, amount, address, tag=None, params={}):
@@ -369,36 +380,49 @@ class remitano(Exchange):
         await self.load_markets()
         currency = self.currency(code)
         request = {
-            'coin_withdrawal[coin_address]': address,
-            'coin_withdrawal[coin_amount]': float(amount),
-            'coin_withdrawal[coin_currency]': currency['id'],
+            "coin_withdrawal[coin_address]": address,
+            "coin_withdrawal[coin_amount]": float(amount),
+            "coin_withdrawal[coin_currency]": currency["id"],
         }
         if tag is not None:
-            request['coin_withdrawal[destination_tag]'] = tag
+            request["coin_withdrawal[destination_tag]"] = tag
         response = await self.privatePostCoinWithdrawals(self.extend(request, params))
         return {
-            'id': self.safe_string(response, 'id'),
-            'info': {'withdraw': response, 'confirm': 'You need to click confirm on your trusted devices'},
+            "id": self.safe_string(response, "id"),
+            "info": {
+                "withdraw": response,
+                "confirm": "You need to click confirm on your trusted devices",
+            },
         }
 
-    def sign(self, path, api='public', method='GET', params={}, headers=None, body=None):
+    def sign(
+        self, path, api="public", method="GET", params={}, headers=None, body=None
+    ):
         request = self.implode_params(path, params)
         query = self.omit(params, self.extract_params(path))
         if query:
-            request += '?' + self.urlencode(query)
-        url = self.urls['api'] + '/' + request
-        if api == 'private':
+            request += "?" + self.urlencode(query)
+        url = self.urls["api"] + "/" + request
+        if api == "private":
             self.check_required_credentials()
             date = self.rfc2616(self.milliseconds())
-            hashedBody = ''
+            hashedBody = ""
             if body:
-                hashedBody = self.hash(self.json(body), 'md5', 'base64')
-            raw = method.upper() + ',application/json,' + hashedBody + ',/api/v1/' + request + ',' + date
-            signature = self.hmac(raw, self.secret, hashlib.sha1, 'base64')
+                hashedBody = self.hash(self.json(body), "md5", "base64")
+            raw = (
+                method.upper()
+                + ",application/json,"
+                + hashedBody
+                + ",/api/v1/"
+                + request
+                + ","
+                + date
+            )
+            signature = self.hmac(raw, self.secret, hashlib.sha1, "base64")
             headers = {
-                'Content-Type': 'application/json',
-                'Content-MD5': hashedBody,
-                'DATE': date,
-                'Authorization': 'APIAuth ' + self.apiKey + ':' + signature,
+                "Content-Type": "application/json",
+                "Content-MD5": hashedBody,
+                "DATE": date,
+                "Authorization": "APIAuth " + self.apiKey + ":" + signature,
             }
-        return {'url': url, 'method': method, 'body': body, 'headers': headers}
+        return {"url": url, "method": method, "body": body, "headers": headers}

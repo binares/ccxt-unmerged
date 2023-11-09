@@ -21,90 +21,91 @@ from ccxt.base.decimal_to_precision import TICK_SIZE
 
 
 class bitforexfu(Exchange):
-
     def describe(self):
-        return self.deep_extend(super(bitforexfu, self).describe(), {
-            'id': 'bitforexfu',
-            'name': 'Bitforex Futures',
-            'countries': ['CN'],
-            # 'version': 'v1',
-            'has': {
-                'cancelOrder': False,
-                'createLimitOrder': False,
-                'createMarketOrder': False,
-                'createOrder': False,
-                'editOrder': False,
-                'fetchBalance': False,
-                'fetchL2OrderBook': False,
-                'fetchMarkets': True,
-                'fetchOHLCV': True,
-                'fetchOrderBook': False,
-                'fetchStatus': 'emulated',
-                'fetchTicker': False,
-                'fetchTrades': False,
-                'privateAPI': False,
-                'publicAPI': False,
-            },
-            'timeframes': {
-                '1m': '1min',
-                '5m': '5min',
-                '15m': '15min',
-                '30m': '30min',
-                '1h': '1hour',
-                '2h': '2hour',
-                '4h': '4hour',
-                '12h': '12hour',
-                '1d': '1day',
-                '1w': '1week',
-                '1M': '1month',
-            },
-            'urls': {
-                'logo': 'https://user-images.githubusercontent.com/1294454/44310033-69e9e600-a3d8-11e8-873d-54d74d1bc4e4.jpg',
-                'api': {
-                    'public': 'https://www.bitforex.com/contract',
-                    'private': 'https://www.bitforex.com/contract',
+        return self.deep_extend(
+            super(bitforexfu, self).describe(),
+            {
+                "id": "bitforexfu",
+                "name": "Bitforex Futures",
+                "countries": ["CN"],
+                # 'version': 'v1',
+                "has": {
+                    "cancelOrder": False,
+                    "createLimitOrder": False,
+                    "createMarketOrder": False,
+                    "createOrder": False,
+                    "editOrder": False,
+                    "fetchBalance": False,
+                    "fetchL2OrderBook": False,
+                    "fetchMarkets": True,
+                    "fetchOHLCV": True,
+                    "fetchOrderBook": False,
+                    "fetchStatus": "emulated",
+                    "fetchTicker": False,
+                    "fetchTrades": False,
+                    "privateAPI": False,
+                    "publicAPI": False,
                 },
-                'www': 'https://www.bitforex.com',
-                'doc': 'https://github.com/githubdev2020/API_Doc_en/wiki',
-                'fees': 'https://help.bitforex.com/en_us/?cat=13',
-                'referral': None,
-            },
-            'api': {
-                'public': {
-                    'get': [
-                        'swap/contract/listAll',
-                        'mkapi/depth',
-                        'mkapi/kline',
-                    ],
+                "timeframes": {
+                    "1m": "1min",
+                    "5m": "5min",
+                    "15m": "15min",
+                    "30m": "30min",
+                    "1h": "1hour",
+                    "2h": "2hour",
+                    "4h": "4hour",
+                    "12h": "12hour",
+                    "1d": "1day",
+                    "1w": "1week",
+                    "1M": "1month",
                 },
-                'private': {
-                    'post': [
-                    ],
+                "urls": {
+                    "logo": "https://user-images.githubusercontent.com/1294454/44310033-69e9e600-a3d8-11e8-873d-54d74d1bc4e4.jpg",
+                    "api": {
+                        "public": "https://www.bitforex.com/contract",
+                        "private": "https://www.bitforex.com/contract",
+                    },
+                    "www": "https://www.bitforex.com",
+                    "doc": "https://github.com/githubdev2020/API_Doc_en/wiki",
+                    "fees": "https://help.bitforex.com/en_us/?cat=13",
+                    "referral": None,
                 },
-            },
-            'fees': {
-                'trading': {
-                    'tierBased': False,
-                    'percentage': True,
-                    'maker': 0.04 / 100,
-                    'taker': 0.06 / 100,
+                "api": {
+                    "public": {
+                        "get": [
+                            "swap/contract/listAll",
+                            "mkapi/depth",
+                            "mkapi/kline",
+                        ],
+                    },
+                    "private": {
+                        "post": [],
+                    },
                 },
-                'funding': {
-                    'tierBased': False,
-                    'percentage': True,
-                    'deposit': {},
-					'withdraw': {},
+                "fees": {
+                    "trading": {
+                        "tierBased": False,
+                        "percentage": True,
+                        "maker": 0.04 / 100,
+                        "taker": 0.06 / 100,
+                    },
+                    "funding": {
+                        "tierBased": False,
+                        "percentage": True,
+                        "deposit": {},
+                        "withdraw": {},
+                    },
                 },
+                "exceptions": {
+                    "4004": OrderNotFound,
+                    "1013": AuthenticationError,
+                    "1016": AuthenticationError,
+                    "3002": InsufficientFunds,
+                    "10204": DDoSProtection,
+                },
+                "precisionMode": TICK_SIZE,
             },
-            'exceptions': {
-                '4004': OrderNotFound,
-                '1013': AuthenticationError,
-                '1016': AuthenticationError,
-                '3002': InsufficientFunds,
-                '10204': DDoSProtection,
-            },
-            'precisionMode': TICK_SIZE,
-        })
+        )
 
     async def fetch_markets(self, params={}):
         response = await self.publicGetSwapContractListAll(params)
@@ -160,115 +161,134 @@ class bitforexfu(Exchange):
         #      }
         #    ]
         #  }
-        data = response['data']
+        data = response["data"]
         result = []
         for i in range(0, len(data)):
             market = data[i]
-            id = self.safe_string(market, 'symbol')
-            symbolParts = id.split('-')
+            id = self.safe_string(market, "symbol")
+            symbolParts = id.split("-")
             baseId = symbolParts[2]
             quoteId = symbolParts[1]
             base = self.safe_currency_code(baseId)
             quote = self.safe_currency_code(quoteId)
-            symbol = base + '/' + quote
+            symbol = base + "/" + quote
             active = True
-            maker = self.safe_float(market, 'feeRateMaker')
-            taker = self.safe_float(market, 'feeRateTaker')
-            pricePrecision = self.safe_integer(market, 'priceOrderPrecision')
+            maker = self.safe_float(market, "feeRateMaker")
+            taker = self.safe_float(market, "feeRateTaker")
+            pricePrecision = self.safe_integer(market, "priceOrderPrecision")
             precision = {
-                'amount': self.safe_integer(market, 'unitQuantity'),
-                'price': math.pow(10, -pricePrecision),  # TICK_SIZE
+                "amount": self.safe_integer(market, "unitQuantity"),
+                "price": math.pow(10, -pricePrecision),  # TICK_SIZE
             }
             limits = {
-                'amount': {
-                    'min': self.safe_float(market, 'minOrderVolume'),
-                    'max': self.safe_float(market, 'maxOrderVolume'),
+                "amount": {
+                    "min": self.safe_float(market, "minOrderVolume"),
+                    "max": self.safe_float(market, "maxOrderVolume"),
                 },
-                'price': {
-                    'min': self.safeFloat( market, 'minOrderPrice'),
-                    'max': self.safeFloat( market, 'maxOrderPrice'),
+                "price": {
+                    "min": self.safeFloat(market, "minOrderPrice"),
+                    "max": self.safeFloat(market, "maxOrderPrice"),
                 },
-                'cost': {
-                    'min': None,
-                    'max': None,
+                "cost": {
+                    "min": None,
+                    "max": None,
                 },
             }
-            result.append({
-                'id': id,
-                'symbol': symbol,
-                'base': base,
-                'quote': quote,
-                'baseId': baseId,
-                'quoteId': quoteId,
-                'active': active,
-                'precision': precision,
-                'limits': limits,
-                'maker': maker,
-                'taker': taker,
-                'type': 'swap',
-                'spot': False,
-                'swap': True,
-                'future': False,
-                'info': market,
-            })
+            result.append(
+                {
+                    "id": id,
+                    "symbol": symbol,
+                    "base": base,
+                    "quote": quote,
+                    "baseId": baseId,
+                    "quoteId": quoteId,
+                    "active": active,
+                    "precision": precision,
+                    "limits": limits,
+                    "maker": maker,
+                    "taker": taker,
+                    "type": "swap",
+                    "spot": False,
+                    "swap": True,
+                    "future": False,
+                    "info": market,
+                }
+            )
         return result
 
-    def parse_ohlcv(self, ohlcv, market=None, timeframe='1m', since=None, limit=None):
-		# quoteVolume = self.safe_float(ohlcv, 'vol')
+    def parse_ohlcv(self, ohlcv, market=None, timeframe="1m", since=None, limit=None):
+        # quoteVolume = self.safe_float(ohlcv, 'vol')
         return [
-            self.safe_integer(ohlcv, 'time'),
-            self.safe_float(ohlcv, 'open'),
-            self.safe_float(ohlcv, 'high'),
-            self.safe_float(ohlcv, 'low'),
-            self.safe_float(ohlcv, 'close'),
+            self.safe_integer(ohlcv, "time"),
+            self.safe_float(ohlcv, "open"),
+            self.safe_float(ohlcv, "high"),
+            self.safe_float(ohlcv, "low"),
+            self.safe_float(ohlcv, "close"),
             None,
         ]
 
-    async def fetch_ohlcv(self, symbol, timeframe='1m', since=None, limit=None, params={}):
+    async def fetch_ohlcv(
+        self, symbol, timeframe="1m", since=None, limit=None, params={}
+    ):
         await self.load_markets()
         market = self.market(symbol)
-		# size is required, max 600
+        # size is required, max 600
         size = 600
         if limit is not None:
             size = limit
         request = {
-            'businessType': market['id'],
-            'kType': self.timeframes[timeframe],
-			'size': size,
+            "businessType": market["id"],
+            "kType": self.timeframes[timeframe],
+            "size": size,
         }
         response = await self.publicGetMkapiKline(self.extend(request, params))
-        ohlcvs = self.safe_value(response, 'data', [])
+        ohlcvs = self.safe_value(response, "data", [])
         return self.parse_ohlcvs(ohlcvs, market, timeframe, since, limit)
 
-    def sign(self, path, api='public', method='GET', params={}, headers=None, body=None):
-        url = self.urls['api'][api] + '/' + self.implode_params(path, params)
+    def sign(
+        self, path, api="public", method="GET", params={}, headers=None, body=None
+    ):
+        url = self.urls["api"][api] + "/" + self.implode_params(path, params)
         query = self.omit(params, self.extract_params(path))
-        if api == 'public':
+        if api == "public":
             if query:
-                url += '?' + self.urlencode(query)
+                url += "?" + self.urlencode(query)
         else:
             self.check_required_credentials()
-            payload = self.urlencode({'accessKey': self.apiKey})
-            query['nonce'] = self.milliseconds()
+            payload = self.urlencode({"accessKey": self.apiKey})
+            query["nonce"] = self.milliseconds()
             if query:
-                payload += '&' + self.urlencode(self.keysort(query))
+                payload += "&" + self.urlencode(self.keysort(query))
             # message = '/' + 'api/' + self.version + '/' + path + '?' + payload
-            message = '/' + path + '?' + payload
+            message = "/" + path + "?" + payload
             signature = self.hmac(self.encode(message), self.encode(self.secret))
-            body = payload + '&signData=' + signature
+            body = payload + "&signData=" + signature
             headers = {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                "Content-Type": "application/x-www-form-urlencoded",
             }
-        return {'url': url, 'method': method, 'body': body, 'headers': headers}
+        return {"url": url, "method": method, "body": body, "headers": headers}
 
-    def handle_errors(self, code, reason, url, method, headers, body, response, requestHeaders, requestBody):
+    def handle_errors(
+        self,
+        code,
+        reason,
+        url,
+        method,
+        headers,
+        body,
+        response,
+        requestHeaders,
+        requestBody,
+    ):
         if not isinstance(body, basestring):
             return  # fallback to default error handler
-        if (body[0] == '{') or (body[0] == '['):
-            feedback = self.id + ' ' + body
-            success = self.safe_value(response, 'success')
+        if (body[0] == "{") or (body[0] == "["):
+            feedback = self.id + " " + body
+            success = self.safe_value(response, "success")
             if success is not None:
                 if not success:
-                    code = self.safe_string(response, 'code')
-                    self.throw_exactly_matched_exception(self.exceptions, code, feedback)
+                    code = self.safe_string(response, "code")
+                    self.throw_exactly_matched_exception(
+                        self.exceptions, code, feedback
+                    )
                     raise ExchangeError(feedback)
