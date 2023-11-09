@@ -615,7 +615,7 @@ class btse(Exchange):
     def find_symbol(self, marketId, market):
         if market is None:
             if marketId in self.markets_by_id:
-                market = self.markets_by_id[marketId]
+                market = self.markets_by_id[marketId][0]
             else:
                 return marketId
         return market["symbol"]

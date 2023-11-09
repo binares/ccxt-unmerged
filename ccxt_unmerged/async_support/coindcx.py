@@ -196,7 +196,7 @@ class coindcx(Exchange):
         tickersMarket = self.safe_string(ticker, "market")
         if not (tickersMarket in self.markets_by_id):
             return None
-        market = self.markets_by_id[tickersMarket]
+        market = self.markets_by_id[tickersMarket][0]
         last = self.safe_float(ticker, "last_price")
         percentage = self.safe_float(ticker, "change_24_hour")
         open = None
@@ -294,7 +294,7 @@ class coindcx(Exchange):
         symbol = None
         if market is None:
             marketId = self.safe_string_2(trade, "s", "symbol")
-            market = self.safe_value(self.markets_by_id, marketId)
+            market = self.safe_value(self.markets_by_id, marketId)[0]
         if market is not None:
             symbol = market["symbol"]
         side = self.safe_string(trade, "side")
@@ -481,7 +481,7 @@ class coindcx(Exchange):
         status = self.parse_order_status(orderStatus)
         marketId = self.safe_string(market, "symbol")
         if market is None:
-            market = self.safe_value(self.markets_by_id, marketId)
+            market = self.safe_value(self.markets_by_id, marketId)[0]
         amount = self.safe_float(order, "total_quantity")
         remaining = self.safe_float(order, "remaining_quantity")
         average = self.safe_float(order, "avg_price")

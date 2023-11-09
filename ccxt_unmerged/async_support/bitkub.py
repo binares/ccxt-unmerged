@@ -245,7 +245,7 @@ class bitkub(Exchange):
         keys = list(response.keys())
         tickers = []
         for i in range(0, len(keys)):
-            market = self.safe_value(self.markets_by_id, keys[i])
+            market = self.safe_value(self.markets_by_id, keys[i])[0]
             tickers.append(self.parse_ticker(response[keys[i]], market))
         return self.filter_by_array(tickers, "symbol", symbols)
 

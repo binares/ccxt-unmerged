@@ -294,7 +294,7 @@ class slicex(Exchange):
         marketId = self.safe_string(ticker, "MarketName")
         if marketId is not None:
             if marketId in self.markets_by_id:
-                market = self.markets_by_id[marketId]
+                market = self.markets_by_id[marketId][0]
             else:
                 symbol = self.parse_symbol(marketId)
         if (symbol is None) and (market is not None):
@@ -630,7 +630,7 @@ class slicex(Exchange):
                 symbol = market["symbol"]
         else:
             if marketId in self.markets_by_id:
-                market = self.markets_by_id[marketId]
+                market = self.markets_by_id[marketId][0]
                 symbol = market["symbol"]
             else:
                 symbol = self.parse_symbol(marketId)

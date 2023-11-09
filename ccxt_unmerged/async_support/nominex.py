@@ -314,7 +314,7 @@ class nominex(Exchange):
             marketId = self.safe_string(ticker, "pair")
             if marketId is not None:
                 if marketId in self.markets_by_id:
-                    market = self.markets_by_id[marketId]
+                    market = self.markets_by_id[marketId][0]
                     symbol = market["symbol"]
                 else:
                     baseId = marketId[0:3]
@@ -612,7 +612,7 @@ class nominex(Exchange):
             marketId = self.safe_string(order, "pairName")
             if marketId is not None:
                 if marketId in self.markets_by_id:
-                    market = self.markets_by_id[marketId]
+                    market = self.markets_by_id[marketId][0]
         if market is not None:
             symbol = market["symbol"]
         orderType = self.safe_string_lower(order, "type")

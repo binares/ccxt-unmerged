@@ -269,7 +269,7 @@ class vitex(Exchange):
         symbol = None
         marketId = self.safe_string(ticker, "symbol")
         if marketId in self.markets_by_id:
-            market = self.markets_by_id[marketId]
+            market = self.markets_by_id[marketId][0]
         if market:
             symbol = market["symbol"]
         last = self.safe_float(ticker, "closePrice")
@@ -626,7 +626,7 @@ class vitex(Exchange):
         symbol = None
         marketId = self.safe_string(order, "symbol")
         if marketId in self.markets_by_id:
-            market = self.markets_by_id[marketId]
+            market = self.markets_by_id[marketId][0]
         if market is not None:
             symbol = market["symbol"]
         timestamp = self.safe_timestamp(order, "createTime")
@@ -680,7 +680,7 @@ class vitex(Exchange):
         symbol = None
         marketId = self.safe_string(order, "symbol")
         if marketId in self.markets_by_id:
-            market = self.markets_by_id[marketId]
+            market = self.markets_by_id[marketId][0]
         if market is not None:
             symbol = market["symbol"]
         return {

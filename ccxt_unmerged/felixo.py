@@ -168,7 +168,7 @@ class felixo(Exchange):
         symbol = None
         marketId = self.safe_string(ticker, "pair")
         if marketId in self.markets_by_id:
-            market = self.markets_by_id[marketId]
+            market = self.markets_by_id[marketId][0]
         if market is not None:
             symbol = market["symbol"]
         last = self.safe_float(ticker, "lastPrice")

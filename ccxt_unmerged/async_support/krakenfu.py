@@ -320,7 +320,7 @@ class krakenfu(Exchange):
         # }
         symbol = None
         marketId = self.safe_string(ticker, "symbol")
-        market = self.safe_value(self.markets_by_id, marketId, market)
+        market = self.safe_value(self.markets_by_id, marketId, market)[0]
         if market is not None:
             symbol = market["symbol"]
         timestamp = self.parse8601(self.safe_string(ticker, "lastTime"))
@@ -452,7 +452,7 @@ class krakenfu(Exchange):
         symbol = None
         if symbolId is not None:
             if symbolId in self.markets_by_id:
-                market = self.markets_by_id[symbolId]
+                market = self.markets_by_id[symbolId][0]
             else:
                 market = None
                 symbol = symbolId
@@ -899,7 +899,7 @@ class krakenfu(Exchange):
         else:
             marketId = self.safe_string(details, "symbol")
             if marketId in self.markets_by_id:
-                market = self.markets_by_id[marketId]
+                market = self.markets_by_id[marketId][0]
                 symbol = market["symbol"]
         timestamp = self.parse8601(
             self.safe_string_2(details, "timestamp", "receivedTime")
