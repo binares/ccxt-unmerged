@@ -8,6 +8,7 @@ import ccxt
 import sys
 import warnings
 
+from ._ccxtUnmergedExchange import ccxtUnmergedExchange
 from .bitclude import bitclude
 from .bitforexfu import bitforexfu
 from .bitkub import bitkub
@@ -27,13 +28,16 @@ from .tradeogre import tradeogre
 from .vitex import vitex
 from .yunex import yunex
 
+
 _ALREADY_MERGED = []
 
 # Add the custom-defined exchanges to ccxt
 for attr, value in list(globals().items()):
     if isinstance(value, type) and issubclass(value, ccxt.Exchange):
         if not hasattr(ccxt, attr):
-            setattr(ccxt, attr, value)
+            newCls = type(attr, (ccxtUnmergedExchange, value), {})
+            setattr(ccxt, attr, newCls)
+            globals()[attr] = newCls
         else:
             _ALREADY_MERGED.append(attr)
 
