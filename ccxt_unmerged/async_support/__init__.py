@@ -20,7 +20,6 @@ from .remitano import remitano
 from .slicex import slicex
 from .tokenomy import tokenomy
 from .vitex import vitex
-from .yunex import yunex
 
 # Add the custom-defined exchanges to ccxt.async_support
 for attr, value in list(globals().items()):

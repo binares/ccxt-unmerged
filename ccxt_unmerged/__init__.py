@@ -25,7 +25,6 @@ from .remitano import remitano
 from .slicex import slicex
 from .tokenomy import tokenomy
 from .vitex import vitex
-from .yunex import yunex
 
 
 _ALREADY_MERGED = []

@@ -24,6 +24,7 @@ out of service:
  - tokensnet
  - txbit
  - vinex
+ - yunex
 
 delisted from ccxt:
  - bw !!
