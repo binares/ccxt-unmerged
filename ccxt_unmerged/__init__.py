@@ -25,7 +25,6 @@ from .primexbt import primexbt
 from .remitano import remitano
 from .slicex import slicex
 from .tokenomy import tokenomy
-from .tradeogre import tradeogre
 from .vitex import vitex
 from .yunex import yunex
 

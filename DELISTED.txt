@@ -2,6 +2,7 @@ added to ccxt:
  - bitopro
  - bitrue
  - cryptocom
+ - tradeogre
  - wazirx
 
 out of service:
