@@ -11,6 +11,7 @@ out of service:
  - bcio
  - beaxy
  - biki
+ - bitforex(fu)
  - bkex
  - ceo
  - coinbene [delist from uxs as well!!]

@@ -6,7 +6,6 @@ import ccxt.async_support
 
 from .._ccxtUnmergedExchange import ccxtUnmergedExchange
 from .bitclude import bitclude
-from .bitforexfu import bitforexfu
 from .bitkub import bitkub
 from .btse import btse
 from .changellypro import changellypro
