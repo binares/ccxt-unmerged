@@ -14,7 +14,6 @@ from .coindcx import coindcx
 from .felixo import felixo
 from .foblgate import foblgate
 from .gateiofu import gateiofu
-from .krakenfutures import krakenfutures
 from .nominex import nominex
 from .primexbt import primexbt
 from .remitano import remitano
