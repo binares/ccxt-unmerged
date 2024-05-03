@@ -24,7 +24,6 @@ from .primexbt import primexbt
 from .remitano import remitano
 from .slicex import slicex
 from .tokenomy import tokenomy
-from .vitex import vitex
 
 
 _ALREADY_MERGED = []

@@ -37,6 +37,7 @@ API BROKEN:
       > AttributeError: 'bitkub' object has no attribute 'publicGetApiMarketSymbols'
       ccxt changed the attribute initiation procedure?
  - changellypro
+ - vitex
 
 MOVED:
  - bitclude -> https://egera.com/
