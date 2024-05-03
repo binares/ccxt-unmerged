@@ -18,6 +18,7 @@ out of service:
  - cossdex
  - dragonex
  - duedex
+ - felixo
  - multi
  - mxc
  - silgonex

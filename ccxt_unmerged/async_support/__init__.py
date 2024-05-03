@@ -11,7 +11,6 @@ from .bitkub import bitkub
 from .btse import btse
 from .changellypro import changellypro
 from .coindcx import coindcx
-from .felixo import felixo
 from .foblgate import foblgate
 from .gateiofu import gateiofu
 from .nominex import nominex
