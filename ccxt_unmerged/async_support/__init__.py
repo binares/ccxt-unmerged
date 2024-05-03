@@ -17,7 +17,6 @@ from .gateiofu import gateiofu
 from .nominex import nominex
 from .primexbt import primexbt
 from .remitano import remitano
-from .slicex import slicex
 
 # Add the custom-defined exchanges to ccxt.async_support
 for attr, value in list(globals().items()):

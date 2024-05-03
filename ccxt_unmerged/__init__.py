@@ -22,7 +22,6 @@ from .gateiofu import gateiofu
 from .nominex import nominex
 from .primexbt import primexbt
 from .remitano import remitano
-from .slicex import slicex
 
 
 _ALREADY_MERGED = []
