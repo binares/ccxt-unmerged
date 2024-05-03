@@ -1,6 +1,7 @@
 """
 Async versions of exchanges that are not present in ccxt
 """
+
 import ccxt.async_support
 
 from .._ccxtUnmergedExchange import ccxtUnmergedExchange
@@ -13,7 +14,7 @@ from .coindcx import coindcx
 from .felixo import felixo
 from .foblgate import foblgate
 from .gateiofu import gateiofu
-from .krakenfu import krakenfu
+from .krakenfutures import krakenfutures
 from .nominex import nominex
 from .primexbt import primexbt
 from .remitano import remitano

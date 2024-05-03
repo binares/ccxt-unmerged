@@ -23,12 +23,12 @@ from ccxt.base.errors import InvalidNonce
 from ccxt.base.decimal_to_precision import TICK_SIZE
 
 
-class krakenfu(Exchange):
+class krakenfutures(Exchange):
     def describe(self):
         return self.deep_extend(
-            super(krakenfu, self).describe(),
+            super(krakenfutures, self).describe(),
             {
-                "id": "krakenfu",
+                "id": "krakenfutures",
                 "name": "Kraken Futures",
                 "countries": ["US"],
                 "version": "v3",

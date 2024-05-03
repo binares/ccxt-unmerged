@@ -1,6 +1,7 @@
 """
 Exchanges that are not present in ccxt
 """
+
 __version__ = "4.0"
 __author__ = "binares"
 
@@ -18,7 +19,7 @@ from .coindcx import coindcx
 from .felixo import felixo
 from .foblgate import foblgate
 from .gateiofu import gateiofu
-from .krakenfu import krakenfu
+from .krakenfutures import krakenfutures
 from .nominex import nominex
 from .primexbt import primexbt
 from .remitano import remitano
