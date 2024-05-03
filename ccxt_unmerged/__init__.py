@@ -10,7 +10,6 @@ import sys
 import warnings
 
 from ._ccxtUnmergedExchange import ccxtUnmergedExchange
-from .bitclude import bitclude
 from .bitkub import bitkub
 from .btse import btse
 from .changellypro import changellypro

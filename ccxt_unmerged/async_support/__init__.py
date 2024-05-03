@@ -5,7 +5,6 @@ Async versions of exchanges that are not present in ccxt
 import ccxt.async_support
 
 from .._ccxtUnmergedExchange import ccxtUnmergedExchange
-from .bitclude import bitclude
 from .bitkub import bitkub
 from .btse import btse
 from .changellypro import changellypro

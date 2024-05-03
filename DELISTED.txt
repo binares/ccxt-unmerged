@@ -47,4 +47,6 @@ API BROKEN:
 MOVED:
  - bitclude -> https://egera.com/
     - API?
+    - also, public endpoints are authenticated
+
 
