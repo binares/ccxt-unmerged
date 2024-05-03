@@ -23,7 +23,6 @@ from .nominex import nominex
 from .primexbt import primexbt
 from .remitano import remitano
 from .slicex import slicex
-from .tokenomy import tokenomy
 
 
 _ALREADY_MERGED = []

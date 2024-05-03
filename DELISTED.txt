@@ -21,6 +21,7 @@ out of service:
  - multi
  - mxc
  - silgonex
+ - tokenomy
  - tokensnet
  - txbit
  - vinex
