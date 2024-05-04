@@ -17,8 +17,8 @@ class changellypro(hitbtc):
                 "urls": {
                     "logo": "",
                     "api": {
-                        "public": "https://api.pro.changelly.com",
-                        "private": "https://api.pro.changelly.com",
+                        "public": "https://api.pro.changelly.com/api/3",
+                        "private": "https://api.pro.changelly.com/api/3",
                     },
                     "www": "https://pro.changelly.com",
                     "doc": "https://api.pro.changelly.com",
