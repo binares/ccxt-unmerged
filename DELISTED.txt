@@ -28,21 +28,16 @@ out of service:
  - tokensnet
  - txbit
  - vinex
+ - vitex (extremely low volume)
  - yunex
-
+ 
 delisted from ccxt:
  - bw !!
  - southxchange !!
  - (zb)
 
 API BROKEN:
- - bitforexfu ??
- - bitkub
-      > AttributeError: 'bitkub' object has no attribute 'publicGetApiMarketSymbols'
-      ccxt changed the attribute initiation procedure?
- - changellypro
- = primexbt
- - vitex
+ - primexbt
 
 MOVED:
  - bitclude -> https://egera.com/
