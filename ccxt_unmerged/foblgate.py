@@ -83,19 +83,40 @@ class foblgate(Exchange):
         #         limits: {amount: [Object], price: [Object], cost: [Object]},
         #         precision: {amount: 8, price: 8},
         #         tierBased: False,
-        #             percentage: True,
-        #             taker: 0.03,
-        #             maker: 0.03,
-        #             symbol: 'ETH/BTC',
-        #             active: True,
-        #             baseId: 'ETH',
-        #             quoteId: 'BTC',
-        #             quote: 'BTC',
-        #             id: 'ETH-BTC',
-        #             base: 'ETH',
-        #             info: {market: 'ETH/BTC', coinName: 'ETH', coinNameKo: '이더리움'}
+        #         percentage: True,
+        #         taker: 0.03,
+        #         maker: 0.03,
+        #         symbol: 'ETH/BTC',
+        #         active: True,
+        #         baseId: 'ETH',
+        #         quoteId: 'BTC',
+        #         quote: 'BTC',
+        #         id: 'ETH-BTC',
+        #         base: 'ETH',
+        #         info: {market: 'ETH/BTC', coinName: 'ETH', coinNameKo: '이더리움'}
         #     }
         # }
+        for market in marketList:
+            market.update(
+                {
+                    "settle": None,
+                    "settleId": None,
+                    "type": "spot",
+                    "spot": True,
+                    "margin": False,
+                    "swap": False,
+                    "future": False,
+                    "option": False,
+                    "contract": False,
+                    "linear": None,
+                    "inverse": None,
+                    "contractSize": None,
+                    "expiry": None,
+                    "expiryDatetime": None,
+                    "strike": None,
+                    "optionType": None,
+                }
+            )
         return marketList
 
     def fetch_order_book(self, symbol, limit=None, params={}):
