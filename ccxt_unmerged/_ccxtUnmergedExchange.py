@@ -12,7 +12,27 @@ class ccxtUnmergedExchange:
         entry = getattr(
             cls, method_name
         )  # returns a function (instead of a bound method)
+        """
+        {
+            'public': {
+                'get': {
+                    'public/currency': 10,
+                    'public/currency/{currency}': 10,
+                    ...
+                }, 
+                ...
+            },
+            ...
+        }
+        """
         for key, value in api.items():
+            # check if is the deepest level
+            if (
+                isinstance(value, dict)
+                and value
+                and not isinstance(list(value.values())[0], (dict, list))
+            ):
+                value = list(value.keys())
             if isinstance(value, list):
                 uppercase_method = key.upper()
                 lowercase_method = key.lower()
@@ -81,7 +101,7 @@ class ccxtUnmergedExchange:
                     to_bind = partialer()
                     setattr(cls, camelcase, to_bind)
                     setattr(cls, underscore, to_bind)
-            else:
+            elif isinstance(value, dict):
                 cls.define_rest_api(value, method_name, paths + [key])
 
     def __init__(self, config={}):

@@ -23,5 +23,7 @@ def test_load_markets():
         try:
             xc = xc_cls()
             xc.load_markets()
+            if not xc.markets:
+                print("No markets were loaded!")
         except Exception as e:
             traceback.print_exc()
