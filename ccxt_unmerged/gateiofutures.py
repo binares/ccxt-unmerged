@@ -15,12 +15,12 @@ from ccxt.base.errors import DDoSProtection
 from ccxt.base.decimal_to_precision import TICK_SIZE
 
 
-class gateiofu(Exchange):
+class gateiofutures(Exchange):
     def describe(self):
         return self.deep_extend(
-            super(gateiofu, self).describe(),
+            super(gateiofutures, self).describe(),
             {
-                "id": "gateiofu",
+                "id": "gateiofutures",
                 "name": "Gate.io Futures",
                 "countries": ["CN"],
                 "rateLimit": 1000,

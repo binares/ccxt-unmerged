@@ -15,7 +15,7 @@ from .btse import btse
 from .changellypro import changellypro
 from .coindcx import coindcx
 from .foblgate import foblgate
-from .gateiofu import gateiofu
+from .gateiofutures import gateiofutures
 from .nominex import nominex
 from .remitano import remitano
 
